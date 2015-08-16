@@ -1,0 +1,35 @@
+{
+    "version": "1.5.0-beta",
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "isolatedModules": false,
+        "jsx": "react",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "declaration": false,
+        "noImplicitAny": false,
+        "removeComments": true,
+        "noLib": false,
+        "preserveConstEnums": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "outDir": "generated_js"
+    },
+    "filesGlob": [
+        "./**/*.ts",
+        "./**/*.tsx",
+        "!./node_modules/**/*"
+    ],
+    "files": [
+        "./express/express-tests.ts",
+        "./express/express.d.ts",
+        "./main.ts",
+        "./node/node-0.10.d.ts",
+        "./node/node-0.11-tests.ts",
+        "./node/node-0.11.d.ts",
+        "./node/node-0.8.8.d.ts",
+        "./node/node-tests.ts",
+        "./node/node.d.ts",
+        "./routes.ts"
+    ]
+}
