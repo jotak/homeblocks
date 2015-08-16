@@ -17,10 +17,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-/// <reference path="node/node.d.ts" />
-/// <reference path="express/express.d.ts" />
-/// <reference path="body-parser/body-parser.d.ts" />
-
 import express = require('express');
 import bodyParser = require('body-parser');
 import routes = require('./routes');
@@ -30,8 +26,9 @@ import routes = require('./routes');
 // Init web server
 var port: Number = 80;
 var app: express.Application = express();
+app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
-routes.register(app);
+//routes.register(app);
 app.listen(port);
 
 console.log("Application listens on " + port);

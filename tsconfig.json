@@ -21,6 +21,7 @@
         "!./node_modules/**/*"
     ],
     "files": [
+        "./body-parser/body-parser.d.ts",
         "./express/express-tests.ts",
         "./express/express.d.ts",
         "./main.ts",
@@ -31,5 +32,8 @@
         "./node/node-tests.ts",
         "./node/node.d.ts",
         "./routes.ts"
-    ]
+    ],
+    "scripts": {
+        "postbuild": "touch toto"
+    }
 }
