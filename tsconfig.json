@@ -18,22 +18,17 @@
     "filesGlob": [
         "./**/*.ts",
         "./**/*.tsx",
-        "!./node_modules/**/*"
+        "!./node_modules/**/*",
+        "../DefinitelyTyped/express/express.d.ts",
+        "../DefinitelyTyped/body-parser/body-parser.d.ts"
     ],
     "files": [
-        "./body-parser/body-parser.d.ts",
-        "./express/express-tests.ts",
-        "./express/express.d.ts",
         "./main.ts",
-        "./node/node-0.10.d.ts",
-        "./node/node-0.11-tests.ts",
-        "./node/node-0.11.d.ts",
-        "./node/node-0.8.8.d.ts",
-        "./node/node-tests.ts",
-        "./node/node.d.ts",
-        "./routes.ts"
+        "./routes.ts",
+        "../DefinitelyTyped/express/express.d.ts",
+        "../DefinitelyTyped/body-parser/body-parser.d.ts"
     ],
     "scripts": {
-        "postbuild": "touch toto"
+        "postbuild": "./postbuild.sh"
     }
 }

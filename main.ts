@@ -24,7 +24,7 @@ import routes = require('./routes');
 "use strict";
 
 // Init web server
-var port: Number = 80;
+var port: Number = 9000;
 var app: express.Application = express();
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());

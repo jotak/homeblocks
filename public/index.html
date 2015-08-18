@@ -1,1 +1,29 @@
-walalahihou
+<html ng-app>
+<head>
+  <title>{{ title }}</title>
+</head>
+<body ng-controller="LinkageController">
+
+<div class="box">
+  <ul>
+    <li ng-repeat="link in links">
+      <a href="{{ link.href }}">{{ link.display }}</a>
+    </li>
+  </ul>
+</div>
+
+<script>
+  function LinkageController($scope){
+    $scope.links = [
+      { display: 'Master HTML/CSS/Javascript', href: 'http://javascript.com' },
+      { display: 'Learn AngularJS', href: '' },
+      { display: 'Build NodeJS backend', href: '' },
+      { display: 'Get started with ExpressJS', href: '' },
+      { display: 'Setup MongoDB database', href: '' }
+    ]
+  }
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js"></script>
+</body>
+</html>
