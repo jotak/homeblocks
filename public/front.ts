@@ -17,14 +17,19 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-import express = require('express');
-import Profiles = require('./profiles');
+/// <reference path='../angularjs/angular.d.ts' />
 
-export function register(app: express.Application) {
-    app.get("/api/:username", function(req, res) {
-        res.json(Profiles.loadFromUsername(req.params.username));
-    });
-    app.get("*", function(req, res) {
-        res.sendFile(__dirname + "/public/index.html");
-    });
+"use strict";
+
+var linkage = angular.module("linkage", []);
+
+function mainController($scope, $http) {
+    $http.get('/api/test')
+        .success(function(profile) {
+            $scope.page = profile.page;
+            console.log(profile.page);
+        })
+        .error(function(data) {
+            console.log('Error: ' + data);
+        });
 }

@@ -1,0 +1,47 @@
+body {
+    background-color: #505555;
+    font-family: Helvetica;
+    color: #8fa7bf;
+}
+
+.dark {
+    background: #020202 none repeat scroll 0 0;
+}
+
+.light {
+    background: #34495e none repeat scroll 0 0;
+}
+
+#page {
+    border: 2px solid #333;
+    border-radius: 4px;
+}
+
+.block {
+    padding: 8px;
+}
+
+.block ul {
+    list-style-type: none;
+}
+
+.block a {
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.block a:link {
+    color: #1abc9c;
+}
+
+.block a:visited {
+    color: #1abc9c;
+}
+
+.block a:active {
+    color: #1abc9c;
+}
+
+.block a:hover {
+    color: #e0e000;
+}

@@ -17,14 +17,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-import express = require('express');
-import Profiles = require('./profiles');
 
-export function register(app: express.Application) {
-    app.get("/api/:username", function(req, res) {
-        res.json(Profiles.loadFromUsername(req.params.username));
-    });
-    app.get("*", function(req, res) {
-        res.sendFile(__dirname + "/public/index.html");
-    });
+"use strict";
+
+interface Link {
+    title: String,
+    url: String,
+    description?: String
 }

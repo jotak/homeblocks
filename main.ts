@@ -24,11 +24,11 @@ import routes = require('./routes');
 "use strict";
 
 // Init web server
-var port: Number = 80;
+var port: Number = 8080;
 var app: express.Application = express();
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
-//routes.register(app);
+routes.register(app);
 app.listen(port);
 
 console.log("Application listens on " + port);
