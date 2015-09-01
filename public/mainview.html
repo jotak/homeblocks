@@ -1,0 +1,12 @@
+    <!-- Page -->
+    <div id="page">
+        <!-- Loop over blocks -->
+        <div class="block" ng-repeat="block in page.blocks">
+            <div class="block-title" ng-if="block.title">{{ block.title }}</div>
+            <ul>
+                <li ng-repeat="link in block.links">
+                    <a href="{{ link.url }}">{{ link.title }}</a>
+                </li>
+            </ul>
+        </div>
+    </div>

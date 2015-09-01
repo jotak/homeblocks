@@ -24,17 +24,18 @@
         "../DefinitelyTyped/angularjs/angular.d.ts"
     ],
     "files": [
-        "../DefinitelyTyped/express/express.d.ts",
-        "../DefinitelyTyped/body-parser/body-parser.d.ts",
-        "../DefinitelyTyped/angularjs/angular.d.ts",
         "./block.ts",
         "./link.ts",
         "./main.ts",
         "./page.ts",
         "./profile.ts",
         "./profiles.ts",
-        "./public/front.ts",
-        "./routes.ts"
+        "./public/app.ts",
+        "./public/mainview.ts",
+        "./routes.ts",
+        "../DefinitelyTyped/express/express.d.ts",
+        "../DefinitelyTyped/body-parser/body-parser.d.ts",
+        "../DefinitelyTyped/angularjs/angular.d.ts"
     ],
     "scripts": {
         "postbuild": "sh postbuild.sh"

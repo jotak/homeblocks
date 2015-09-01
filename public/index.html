@@ -3,27 +3,18 @@
 <html ng-app="linkage">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Linkage</title>
+    <title>{{ title }}</title>
 
     <link rel="stylesheet" href="common-layout.css">
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script><!-- load angular -->
-    <script src="front.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-route.js"></script>
+    <script src="app.js"></script>
+    <script src="mainview.js"></script>
 
 </head>
-<body ng-controller="mainController">
-    <!-- Page -->
-    <div id="page">
-        <!-- Loop over blocks -->
-        <div class="block" ng-repeat="block in page.blocks">
-            <div class="block-title" ng-if="{{ block.title }}">{{ block.title }}</div>
-            <ul>
-                <li ng-repeat="link in block.links">
-                    <a href="{{ link.url }}">{{ link.title }}</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-
+<body>
+    <div ng-view></div>
 </body>
 </html>

@@ -17,14 +17,23 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-/// <reference path='../angularjs/angular.d.ts' />
-
 "use strict";
 
-var linkage = angular.module("linkage", []);
+angular.module('linkage.mainview', ['ngRoute'])
 
-function mainController($scope, $http) {
-    $http.get('/api/test')
+.config(['$routeProvider', function($routeProvider) {
+    // $routeProvider.when('/mainview', {
+    //     templateUrl: 'mainview.html',
+    //     controller: 'mainViewCtrl'
+    // });
+    $routeProvider.when('/u/:username', {
+        templateUrl: 'mainview.html',
+        controller: 'mainViewCtrl'
+    });
+}])
+.controller("mainViewCtrl", ['$scope','$http','$routeParams','$rootScope', function($scope, $http, $routeParams, $rootScope) {
+    $rootScope.title = "Linkage - " + $routeParams.username;
+    $http.get('/api/' + $routeParams.username)
         .success(function(profile) {
             $scope.page = profile.page;
             console.log(profile.page);
@@ -32,4 +41,4 @@ function mainController($scope, $http) {
         .error(function(data) {
             console.log('Error: ' + data);
         });
-}
+}]);
