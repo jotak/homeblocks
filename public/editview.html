@@ -1,0 +1,15 @@
+<!-- Page -->
+<div id="page">
+    <div class="block" id="main-block" style="{{ page.mainBlock.style }}" ng-class="{'selected': page.selectedBlock === 0 }" ng-click="onClickBlock(0)">
+        Welcome in Edit View!
+    </div>
+    <!-- Loop over blocks -->
+    <div class="block" style="{{ block.style }}" ng-repeat="block in page.blocks" ng-class="{'selected': page.selectedBlock === block.id }" ng-click="onClickBlock(block.id)">
+        <div class="block-title" ng-if="block.title">{{ block.title }}</div>
+        <ul>
+            <li ng-repeat="link in block.links">
+                <a href="{{ link.url }}">{{ link.title }}</a>
+            </li>
+        </ul>
+    </div>
+</div>

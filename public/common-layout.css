@@ -13,16 +13,28 @@ body {
 }
 
 #page {
-    border: 2px solid #333;
-    border-radius: 4px;
 }
 
 .block {
-    padding: 8px;
+    border: 2px solid #333;
+    padding-top: 8px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200px;
+    height: 200px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.block.selected {
+    border: 5px solid #297;
 }
 
 .block ul {
     list-style-type: none;
+    padding: 0;
+    margin: 10px 0 0;
 }
 
 .block a {

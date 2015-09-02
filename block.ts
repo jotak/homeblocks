@@ -21,6 +21,11 @@ SOFTWARE.
 "use strict";
 
 interface Block {
+    posx: Number,
+    posy: Number
+}
+
+interface CustomBlock extends Block {
     title?: String,
     links: Link[]
 }

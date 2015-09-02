@@ -19,20 +19,22 @@ SOFTWARE.
 */
 "use strict";
 
-angular.module('linkage.mainview', ['ngRoute'])
+angular.module('linkage.editview', ['ngRoute'])
 
 .config(['$routeProvider', function($routeProvider) {
-    $routeProvider.when('/r/:username', {
-        templateUrl: 'mainview.html',
-        controller: 'mainViewCtrl'
+    $routeProvider.when('/w/:username', {
+        templateUrl: 'editview.html',
+        controller: 'editViewCtrl'
     });
 }])
-.controller("mainViewCtrl", ['$scope','$http','$routeParams','$rootScope', function($scope, $http, $routeParams, $rootScope) {
+.controller("editViewCtrl", ['$scope','$http','$routeParams','$rootScope', function($scope, $http, $routeParams, $rootScope) {
     $rootScope.title = "Linkage - " + $routeParams.username;
     $http.get('/api/' + $routeParams.username)
         .success(function(profile) {
             $scope.page = profile.page;
             fillPageStyle($scope.page);
+            $scope.page.selectedBlock = -1;
+            initListeners($scope);
             console.log(profile.page);
         })
         .error(function(data) {
@@ -40,18 +42,13 @@ angular.module('linkage.mainview', ['ngRoute'])
         });
 }]);
 
-function fillPageStyle(page) {
-    var id = 0;
-    fillBlockStyle(page.mainBlock, id);
-    for (var i in page.blocks) {
-        fillBlockStyle(page.blocks[i], ++id);
+function initListeners($scope) {
+    $scope.onClickBlock = function(id) {
+        console.log("Clicked " + id);
+        if ($scope.page.selectedBlock === id) {
+            $scope.page.selectedBlock = -1;
+        } else {
+            $scope.page.selectedBlock = id;
+        }
     }
-}
-
-function fillBlockStyle(block, id) {
-    var marginLeft = -100 + block.posx * 200;
-    var marginTop = -100 + block.posy * 200;
-    var color = ((block.posx + block.posy) % 2) ? "#34495e" : "#020202";
-    block.style = "margin-left: " + marginLeft + "px; margin-top: " + marginTop + "px; background-color: " + color;
-    block.id = id;
 }

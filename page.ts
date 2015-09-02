@@ -21,5 +21,6 @@ SOFTWARE.
 "use strict";
 
 interface Page {
-    blocks: Block[]
+    mainBlock: Block,
+    blocks: CustomBlock[]
 }

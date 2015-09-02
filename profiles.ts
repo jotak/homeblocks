@@ -27,11 +27,42 @@ class Profiles {
             username: "jotak",
             hashedPass: "",
             page: {
+                mainBlock: {
+                    posx: 0,
+                    posy: 0
+                },
                 blocks: [{
-                    title: "main",
+                    title: "News",
+                    posx: -1,
+                    posy: 0,
                     links: [{
-                        title: "exodil",
-                        url: "http://exodil.qaraywa.net",
+                        title: "Rue89",
+                        url: "http://rue89.nouvelobs.com/",
+                        description: ""
+                    },{
+                        title: "Le Monde",
+                        url: "http://www.lemonde.fr/",
+                        description: ""
+                    }]
+                },{
+                    title: "Dev",
+                    posx: 1,
+                    posy: 0,
+                    links: [{
+                        title: "GitHub",
+                        url: "https://github.com/jotak?tab=repositories",
+                        description: ""
+                    },{
+                        title: "Devlog",
+                        url: "http://www.qaraywa.net/devlog/",
+                        description: "(<a href='http://www.qaraywa.net/devlog/wp-admin/index.php'>admin</a>)"
+                    },{
+                        title: "Stack Overflow",
+                        url: "http://stackoverflow.com/",
+                        description: ""
+                    },{
+                        title: "SE / Programmers",
+                        url: "http://programmers.stackexchange.com/",
                         description: ""
                     }]
                 }]

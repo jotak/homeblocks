@@ -1,12 +1,15 @@
-    <!-- Page -->
-    <div id="page">
-        <!-- Loop over blocks -->
-        <div class="block" ng-repeat="block in page.blocks">
-            <div class="block-title" ng-if="block.title">{{ block.title }}</div>
-            <ul>
-                <li ng-repeat="link in block.links">
-                    <a href="{{ link.url }}">{{ link.title }}</a>
-                </li>
-            </ul>
-        </div>
+<!-- Page -->
+<div id="page">
+    <div class="block" id="main-block" style="{{ page.mainBlock.style }}">
+        Welcome!
     </div>
+    <!-- Loop over blocks -->
+    <div class="block" style="{{ block.style }}" ng-repeat="block in page.blocks">
+        <div class="block-title" ng-if="block.title">{{ block.title }}</div>
+        <ul>
+            <li ng-repeat="link in block.links">
+                <a href="{{ link.url }}">{{ link.title }}</a>
+            </li>
+        </ul>
+    </div>
+</div>
