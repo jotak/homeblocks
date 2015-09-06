@@ -28,3 +28,13 @@ angular.module('linkage', [
 .config(['$routeProvider', function($routeProvider) {
     $routeProvider.otherwise({redirectTo: '/r/sandbox'});
 }]);
+
+function initListeners($scope, $location, username) {
+    $scope.viewMode = function() {
+        $location.path("/r/" + username);
+    }
+    $scope.editMode = function() {
+        $location.path("/w/" + username);
+    }
+    initEditListeners($scope);
+}

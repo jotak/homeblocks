@@ -1,15 +1,26 @@
 <!-- Page -->
 <div id="page">
     <div class="block" id="main-block" style="{{ page.mainBlock.style }}" ng-class="{'selected': page.selectedBlock === 0 }" ng-click="onClickBlock(0)">
-        Welcome in Edit View!
+        Welcome in edit view, {{ username }}!<br/><br/><br/>
+        <input type='button' value='Back' ng-click='viewMode()'>
     </div>
     <!-- Loop over blocks -->
     <div class="block" style="{{ block.style }}" ng-repeat="block in page.blocks" ng-class="{'selected': page.selectedBlock === block.id }" ng-click="onClickBlock(block.id)">
         <div class="block-title" ng-if="block.title">{{ block.title }}</div>
         <ul>
             <li ng-repeat="link in block.links">
-                <a href="{{ link.url }}">{{ link.title }}</a>
+                <div ng-class="{'hidden': link.editing }">
+                    <a ng-click="link.editing = true; $event.stopPropagation();">{{ link.title }}</a>
+                    <a ng-click="onDeleteLink(block, link); $event.stopPropagation();"><i class="fa fa-trash"></i></a>
+                </div>
+                <div ng-class="{'hidden': !link.editing }">
+                    <input type='text' placeholder='Title' ng-model='link.title'><br/>
+                    <input type='text' placeholder='URL' ng-model='link.url'>
+                    <input type='text' placeholder='Description' ng-model='link.description'>
+                    <input type='button' value='Ok' ng-click="onSaveLink(link); $event.stopPropagation();">
+                </div>
             </li>
         </ul>
+        <a ng-click="onCreateLink(block); $event.stopPropagation();"><i class="fa fa-plus-circle"></i></a>
     </div>
 </div>

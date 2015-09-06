@@ -57,3 +57,15 @@ body {
 .block a:hover {
     color: #e0e000;
 }
+
+.block li a {
+    cursor: pointer;
+}
+
+.block li .fa-trash {
+    margin-left: 5px;
+}
+
+.hidden {
+    display: none;
+}

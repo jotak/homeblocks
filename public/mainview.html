@@ -1,7 +1,8 @@
 <!-- Page -->
 <div id="page">
     <div class="block" id="main-block" style="{{ page.mainBlock.style }}">
-        Welcome!
+        Welcome {{ username }}!<br/><br/><br/>
+        <input type='button' value='Edit' ng-click='editMode()'>
     </div>
     <!-- Loop over blocks -->
     <div class="block" style="{{ block.style }}" ng-repeat="block in page.blocks">

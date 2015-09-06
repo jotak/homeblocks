@@ -27,13 +27,14 @@ angular.module('linkage.mainview', ['ngRoute'])
         controller: 'mainViewCtrl'
     });
 }])
-.controller("mainViewCtrl", ['$scope','$http','$routeParams','$rootScope', function($scope, $http, $routeParams, $rootScope) {
+.controller("mainViewCtrl", ['$scope','$http','$routeParams','$rootScope','$location', function($scope, $http, $routeParams, $rootScope, $location) {
     $rootScope.title = "Linkage - " + $routeParams.username;
     $http.get('/api/' + $routeParams.username)
         .success(function(profile) {
             $scope.page = profile.page;
+            $scope.username = $routeParams.username;
             fillPageStyle($scope.page);
-            console.log(profile.page);
+            initListeners($scope, $location, $routeParams.username);
         })
         .error(function(data) {
             console.log('Error: ' + data);

@@ -27,28 +27,48 @@ angular.module('linkage.editview', ['ngRoute'])
         controller: 'editViewCtrl'
     });
 }])
-.controller("editViewCtrl", ['$scope','$http','$routeParams','$rootScope', function($scope, $http, $routeParams, $rootScope) {
+.controller("editViewCtrl", ['$scope','$http','$routeParams','$rootScope','$location', function($scope, $http, $routeParams, $rootScope, $location) {
     $rootScope.title = "Linkage - " + $routeParams.username;
     $http.get('/api/' + $routeParams.username)
         .success(function(profile) {
             $scope.page = profile.page;
+            $scope.username = $routeParams.username;
             fillPageStyle($scope.page);
             $scope.page.selectedBlock = -1;
-            initListeners($scope);
-            console.log(profile.page);
+            initListeners($scope, $location, $routeParams.username);
         })
         .error(function(data) {
             console.log('Error: ' + data);
         });
 }]);
 
-function initListeners($scope) {
+function initEditListeners($scope) {
     $scope.onClickBlock = function(id) {
-        console.log("Clicked " + id);
         if ($scope.page.selectedBlock === id) {
             $scope.page.selectedBlock = -1;
         } else {
             $scope.page.selectedBlock = id;
+        }
+    }
+
+    $scope.onSaveLink = function(link) {
+        link.editing = false;
+    }
+
+    $scope.onCreateLink = function(block) {
+        var link = {
+            title: "",
+            url: "",
+            description: "",
+            editing: true
+        };
+        block.links.push(link);
+    }
+
+    $scope.onDeleteLink = function(block, link) {
+        var index = block.links.indexOf(link);
+        if (index >= 0) {
+            block.links.splice(index, 1);
         }
     }
 }
