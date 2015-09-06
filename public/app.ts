@@ -26,15 +26,52 @@ angular.module('linkage', [
     'linkage.editview'
 ])
 .config(['$routeProvider', function($routeProvider) {
-    $routeProvider.otherwise({redirectTo: '/r/sandbox'});
+    $routeProvider.otherwise({redirectTo: '/v/sandbox'});
 }]);
 
-function initListeners($scope, $location, username) {
+function initListeners($scope, $location, $http) {
     $scope.viewMode = function() {
-        $location.path("/r/" + username);
+        $location.path("/v/" + $scope.username);
     }
     $scope.editMode = function() {
-        $location.path("/w/" + username);
+        $location.path("/e/" + $scope.username);
     }
-    initEditListeners($scope);
+    initEditListeners($scope, $http);
+}
+
+function computePositions(blocks) {
+    var map = {};
+    // First pass: fill map
+    for (var i in blocks) {
+        var block = blocks[i];
+        map[block.posx + "," + block.posy] = block;
+    }
+    // Second pass: extract information
+    for (var i in blocks) {
+        var block = blocks[i];
+        block.N = map[block.posx + "," + (block.posy-1)] !== undefined;
+        block.S = map[block.posx + "," + (block.posy+1)] !== undefined;
+        block.E = map[(block.posx+1) + "," + block.posy] !== undefined;
+        block.W = map[(block.posx-1) + "," + block.posy] !== undefined;
+    }
+}
+
+function findBlockByPosition(blocks, x, y) {
+    for (var i in blocks) {
+        var block = blocks[i];
+        if (block.posx == x && block.posy == y) {
+            return block;
+        }
+    }
+    return null;
+}
+
+function saveProfile($http, username, profile) {
+    $http.post('/api/' + username, {profile: profile})
+        .success(function(response) {
+            console.log("Profile has been saved: " + response);
+        })
+        .error(function(data) {
+            console.log('Error: ' + data);
+        });
 }

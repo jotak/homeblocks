@@ -18,78 +18,54 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 import q = require("q");
+import fs = require('fs');
 import Profile = require('./profile');
 
 "use strict";
 
 class Profiles {
-    public static loadFromUsername(username: String): q.Promise<Profile> {
+
+    private static path(username: string): string {
+        return "profiles/" + username + ".json";
+    }
+
+    static load(username: string): q.Promise<Profile> {
         var deferred: q.Deferred<Profile> = q.defer<Profile>();
-        deferred.resolve({
-            username: "jotak",
+        fs.readFile(Profiles.path(username), {encoding: "utf8"}, function(err, data) {
+            if (err) {
+                deferred.reject(err);
+            } else {
+                var jsonContent: Profile = eval('(' + data + ')');
+                deferred.resolve(jsonContent);
+            }
+        });
+        return deferred.promise;
+    }
+
+    static save(username: string, profile: Profile): q.Promise<string> {
+        var deferred: q.Deferred<string> = q.defer<string>();
+        fs.writeFile(Profiles.path(username), JSON.stringify(profile), function(err) {
+            if (err) {
+                deferred.reject(new Error(err.code));
+            } else {
+                deferred.resolve("OK");
+            }
+        });
+        return deferred.promise;
+    }
+
+    static generateEmptyProfile(username: string): Profile {
+        return {
+            username: username,
             hashedPass: "",
             page: {
                 mainBlock: {
                     posx: 0,
                     posy: 0
                 },
-                blocks: [{
-                    title: "News",
-                    posx: -1,
-                    posy: 0,
-                    links: [{
-                        title: "Rue89",
-                        url: "http://rue89.nouvelobs.com/",
-                        description: ""
-                    },{
-                        title: "Le Monde",
-                        url: "http://www.lemonde.fr/",
-                        description: ""
-                    }]
-                },{
-                    title: "Dev",
-                    posx: 1,
-                    posy: 0,
-                    links: [{
-                        title: "GitHub",
-                        url: "https://github.com/jotak?tab=repositories",
-                        description: ""
-                    },{
-                        title: "Devlog",
-                        url: "http://www.qaraywa.net/devlog/",
-                        description: "(<a href='http://www.qaraywa.net/devlog/wp-admin/index.php'>admin</a>)"
-                    },{
-                        title: "Stack Overflow",
-                        url: "http://stackoverflow.com/",
-                        description: ""
-                    },{
-                        title: "SE / Programmers",
-                        url: "http://programmers.stackexchange.com/",
-                        description: ""
-                    }]
-                }]
+                blocks: []
             }
-        });
-        return deferred.promise;
-    }
-
-    public static computePositions(profile: Profile): Profile {
-        var blocks: Block[] = [profile.page.mainBlock].concat(profile.page.blocks);
-        var map: {[pos: string]: Block} = {};
-        // First pass: fill map
-        for (var i in blocks) {
-            var block = blocks[i];
-            map[block.posx + "," + block.posy] = block;
         }
-        // Second pass: extract information
-        for (var i in blocks) {
-            var block = blocks[i];
-            block.N = map[block.posx + "," + (block.posy-1)] !== undefined;
-            block.S = map[block.posx + "," + (block.posy+1)] !== undefined;
-            block.E = map[(block.posx+1) + "," + block.posy] !== undefined;
-            block.W = map[(block.posx-1) + "," + block.posy] !== undefined;
-        }
-        return profile;
     }
 }
 export = Profiles

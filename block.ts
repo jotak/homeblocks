@@ -22,11 +22,7 @@ SOFTWARE.
 
 interface Block {
     posx: number,
-    posy: number,
-    N?: boolean,
-    S?: boolean,
-    E?: boolean,
-    W?: boolean
+    posy: number
 }
 
 interface CustomBlock extends Block {

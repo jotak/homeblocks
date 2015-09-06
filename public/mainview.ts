@@ -22,7 +22,7 @@ SOFTWARE.
 angular.module('linkage.mainview', ['ngRoute'])
 
 .config(['$routeProvider', function($routeProvider) {
-    $routeProvider.when('/r/:username', {
+    $routeProvider.when('/v/:username', {
         templateUrl: 'mainview.html',
         controller: 'mainViewCtrl'
     });
@@ -31,21 +31,22 @@ angular.module('linkage.mainview', ['ngRoute'])
     $rootScope.title = "Linkage - " + $routeParams.username;
     $http.get('/api/' + $routeParams.username)
         .success(function(profile) {
-            $scope.page = profile.page;
+            $scope.profile = profile;
             $scope.username = $routeParams.username;
-            fillPageStyle($scope.page);
-            initListeners($scope, $location, $routeParams.username);
+            $scope.blocks = [profile.page.mainBlock].concat(profile.page.blocks);
+            fillPageStyle($scope.blocks);
+            initListeners($scope, $location, $http);
         })
         .error(function(data) {
             console.log('Error: ' + data);
         });
 }]);
 
-function fillPageStyle(page) {
+function fillPageStyle(blocks) {
+    computePositions(blocks);
     var id = 0;
-    fillBlockStyle(page.mainBlock, id);
-    for (var i in page.blocks) {
-        fillBlockStyle(page.blocks[i], ++id);
+    for (var i in blocks) {
+        fillBlockStyle(blocks[i], id++);
     }
 }
 

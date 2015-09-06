@@ -63,6 +63,13 @@ body {
     display: none;
 }
 
+.del-block {
+    position: absolute;
+    font-size: 1.4em;
+    top: 167px;
+    left: 175px;
+}
+
 .btn-north,
 .btn-south,
 .btn-east,
@@ -71,6 +78,7 @@ body {
     font-size: 1.4em;
     margin-left: -10px;
     margin-top: -14px;
+    z-index: 1;
 }
 
 .btn-north {

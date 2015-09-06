@@ -23,12 +23,34 @@ import Profiles = require('./profiles');
 
 export function register(app: express.Application) {
     app.get("/api/:username", function(req, res) {
-        Profiles.loadFromUsername(req.params.username).then(function(profile: Profile) {
-            profile = Profiles.computePositions(profile);
+        Profiles.load(req.params.username).then(function(profile: Profile) {
             res.json(profile);
-        });
+        }).fail(function(reason: Error) {
+            console.log("Application error: " + reason.message);
+            console.log("Generating new empty profile");
+            res.json(Profiles.generateEmptyProfile(req.params.username))
+        }).done();
     });
+
+    app.post("/api/:username", function(req, res) {
+        if (!checkUsername(req.params.username)) {
+            res.status(400).send("Invalid user name");
+            return;
+        }
+        Profiles.save(req.params.username, req.body.profile).then(function(status: string) {
+            res.send(status);
+        }).fail(function(reason: Error) {
+            console.log("Application error: " + reason.message);
+            res.status(500).send(String(reason));
+        }).done();
+    });
+
     app.get("*", function(req, res) {
         res.sendFile(__dirname + "/public/index.html");
     });
+}
+
+function checkUsername(username: string): boolean {
+    var reg = /^[\w]+$/;
+    return reg.test(username);
 }

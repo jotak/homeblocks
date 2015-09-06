@@ -1,34 +1,41 @@
 <!-- Page -->
 <div id="page">
-    <div class="block" id="main-block" style="{{ page.mainBlock.style }}" ng-class="{'selected': page.selectedBlock === 0 }" ng-click="onClickBlock(0)">
-        Welcome in edit view, {{ username }}!<br/><br/><br/>
-        <input type='button' value='Back' ng-click='viewMode()'>
-        <a ng-click="on(); $event.stopPropagation();" class="btn-north"><i ng-class="{'fa fa-plus-square': !page.mainBlock.N, 'fa fa-refresh': page.mainBlock.N}"></i></a>
-        <a ng-click="on(); $event.stopPropagation();" class="btn-south"><i ng-class="{'fa fa-plus-square': !page.mainBlock.S, 'fa fa-refresh': page.mainBlock.S}"></i></a>
-        <a ng-click="on(); $event.stopPropagation();" class="btn-east"><i ng-class="{'fa fa-plus-square': !page.mainBlock.E, 'fa fa-refresh': page.mainBlock.E}"></i></a>
-        <a ng-click="on(); $event.stopPropagation();" class="btn-west"><i ng-class="{'fa fa-plus-square': !page.mainBlock.W, 'fa fa-refresh': page.mainBlock.W}"></i></a>
-    </div>
     <!-- Loop over blocks -->
-    <div class="block" style="{{ block.style }}" ng-repeat="block in page.blocks" ng-class="{'selected': page.selectedBlock === block.id }" ng-click="onClickBlock(block.id)">
-        <div class="block-title" ng-if="block.title">{{ block.title }}</div>
-        <ul>
+    <div class="block" style="{{ block.style }}" ng-repeat="block in blocks">
+        <div ng-class="{'hidden': block.editTitle }">
+            <div ng-if="block.id != 0" class="block-title" ng-click="block.editTitle = true;">
+                {{ block.title || "(no title)" }}
+            </div>
+        </div>
+        <div ng-class="{'hidden': !block.editTitle }">
+            <input type='text' placeholder='Title' ng-model='block.title'>
+            <input type='button' value='Ok' ng-click="onSaveBlock(block);">
+        </div>
+        <span ng-if="block.id == 0">
+            Welcome in edit view, {{ username }}!<br/><br/><br/>
+            <input type='button' value='Back' ng-click='viewMode()'>
+        </span>
+        <ul ng-if="block.id != 0">
             <li ng-repeat="link in block.links">
                 <div ng-class="{'hidden': link.editing }">
-                    <a ng-click="link.editing = true; $event.stopPropagation();">{{ link.title }}</a>
-                    <a ng-click="onDeleteLink(block, link); $event.stopPropagation();"><i class="fa fa-trash"></i></a>
+                    <a ng-click="link.editing = true;">{{ link.title }}</a>
+                    <a ng-click="onDeleteLink(block, link);"><i class="fa fa-trash"></i></a>
                 </div>
                 <div ng-class="{'hidden': !link.editing }">
                     <input type='text' placeholder='Title' ng-model='link.title'><br/>
                     <input type='text' placeholder='URL' ng-model='link.url'>
                     <input type='text' placeholder='Description' ng-model='link.description'>
-                    <input type='button' value='Ok' ng-click="onSaveLink(link); $event.stopPropagation();">
+                    <input type='button' value='Ok' ng-click="onSaveLink(link);">
                 </div>
             </li>
         </ul>
-        <a ng-click="onCreateLink(block); $event.stopPropagation();"><i class="fa fa-plus-circle"></i></a>
-        <a ng-click="on(); $event.stopPropagation();" class="btn-north"><i ng-class="{'fa fa-plus-square': !block.N, 'fa fa-refresh': block.N}"></i></a>
-        <a ng-click="on(); $event.stopPropagation();" class="btn-south"><i ng-class="{'fa fa-plus-square': !block.S, 'fa fa-refresh': block.S}"></i></a>
-        <a ng-click="on(); $event.stopPropagation();" class="btn-east"><i ng-class="{'fa fa-plus-square': !block.E, 'fa fa-refresh': block.E}"></i></a>
-        <a ng-click="on(); $event.stopPropagation();" class="btn-west"><i ng-class="{'fa fa-plus-square': !block.W, 'fa fa-refresh': block.W}"></i></a>
+        <a ng-if="block.id != 0" ng-click="onCreateLink(block);"><i class="fa fa-plus-circle"></i></a>
+        <a ng-if="block.id != 0" ng-click="onDeleteBlock(block);" class="del-block"><i class="fa fa-trash"></i></a>
+        <a ng-if="block.N" ng-click="onSwapBlocks(block, block.posx, block.posy-1);" class="btn-north"><i class="fa fa-refresh"></i></a>
+        <a ng-if="!block.N" ng-click="onCreateBlock(block.posx, block.posy-1);" class="btn-north"><i class="fa fa-plus-square"></i></a>
+        <a ng-if="!block.S" ng-click="onCreateBlock(block.posx, block.posy+1);" class="btn-south"><i class="fa fa-plus-square"></i></a>
+        <a ng-if="block.E" ng-click="onSwapBlocks(block, block.posx+1, block.posy);" class="btn-east"><i class="fa fa-refresh"></i></a>
+        <a ng-if="!block.E" ng-click="onCreateBlock(block.posx+1, block.posy);" class="btn-east"><i class="fa fa-plus-square"></i></a>
+        <a ng-if="!block.W" ng-click="onCreateBlock(block.posx-1, block.posy);" class="btn-west"><i class="fa fa-plus-square"></i></a>
     </div>
 </div>
