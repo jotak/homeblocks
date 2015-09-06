@@ -21,7 +21,8 @@
         "!./node_modules/**/*",
         "../DefinitelyTyped/express/express.d.ts",
         "../DefinitelyTyped/body-parser/body-parser.d.ts",
-        "../DefinitelyTyped/angularjs/angular.d.ts"
+        "../DefinitelyTyped/angularjs/angular.d.ts",
+        "../DefinitelyTyped/q/Q.d.ts"
     ],
     "files": [
         "./block.ts",
@@ -31,13 +32,13 @@
         "./profile.ts",
         "./profiles.ts",
         "./public/app.ts",
-        "./public/common.ts",
         "./public/editview.ts",
         "./public/mainview.ts",
         "./routes.ts",
         "../DefinitelyTyped/express/express.d.ts",
         "../DefinitelyTyped/body-parser/body-parser.d.ts",
-        "../DefinitelyTyped/angularjs/angular.d.ts"
+        "../DefinitelyTyped/angularjs/angular.d.ts",
+        "../DefinitelyTyped/q/Q.d.ts"
     ],
     "scripts": {
         "postbuild": "sh postbuild.sh"

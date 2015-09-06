@@ -17,13 +17,15 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+import q = require("q");
 import Profile = require('./profile');
 
 "use strict";
 
 class Profiles {
-    public static loadFromUsername(username: String): Profile {
-        return {
+    public static loadFromUsername(username: String): q.Promise<Profile> {
+        var deferred: q.Deferred<Profile> = q.defer<Profile>();
+        deferred.resolve({
             username: "jotak",
             hashedPass: "",
             page: {
@@ -67,7 +69,27 @@ class Profiles {
                     }]
                 }]
             }
-        };
+        });
+        return deferred.promise;
+    }
+
+    public static computePositions(profile: Profile): Profile {
+        var blocks: Block[] = [profile.page.mainBlock].concat(profile.page.blocks);
+        var map: {[pos: string]: Block} = {};
+        // First pass: fill map
+        for (var i in blocks) {
+            var block = blocks[i];
+            map[block.posx + "," + block.posy] = block;
+        }
+        // Second pass: extract information
+        for (var i in blocks) {
+            var block = blocks[i];
+            block.N = map[block.posx + "," + (block.posy-1)] !== undefined;
+            block.S = map[block.posx + "," + (block.posy+1)] !== undefined;
+            block.E = map[(block.posx+1) + "," + block.posy] !== undefined;
+            block.W = map[(block.posx-1) + "," + block.posy] !== undefined;
+        }
+        return profile;
     }
 }
 export = Profiles

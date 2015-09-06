@@ -21,11 +21,15 @@ SOFTWARE.
 "use strict";
 
 interface Block {
-    posx: Number,
-    posy: Number
+    posx: number,
+    posy: number,
+    N?: boolean,
+    S?: boolean,
+    E?: boolean,
+    W?: boolean
 }
 
 interface CustomBlock extends Block {
-    title?: String,
+    title?: string,
     links: Link[]
 }

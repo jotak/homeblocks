@@ -18,11 +18,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 import express = require('express');
+import Profile = require('./profile');
 import Profiles = require('./profiles');
 
 export function register(app: express.Application) {
     app.get("/api/:username", function(req, res) {
-        res.json(Profiles.loadFromUsername(req.params.username));
+        Profiles.loadFromUsername(req.params.username).then(function(profile: Profile) {
+            profile = Profiles.computePositions(profile);
+            res.json(profile);
+        });
     });
     app.get("*", function(req, res) {
         res.sendFile(__dirname + "/public/index.html");

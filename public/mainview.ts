@@ -54,5 +54,9 @@ function fillBlockStyle(block, id) {
     var marginTop = -100 + block.posy * 200;
     var color = ((block.posx + block.posy) % 2) ? "#34495e" : "#020202";
     block.style = "margin-left: " + marginLeft + "px; margin-top: " + marginTop + "px; background-color: " + color;
+    block.NStyle = "margin-left: " + (marginLeft+100) + "px; margin-top: " + marginTop + "px;";
+    block.SStyle = "margin-left: " + (marginLeft+100) + "px; margin-top: " + (marginTop+200) + "px;";
+    block.EStyle = "margin-left: " + (marginLeft+200) + "px; margin-top: " + (marginTop+100) + "px;";
+    block.WStyle = "margin-left: " + marginLeft + "px; margin-top: " + (marginTop+100) + "px;";
     block.id = id;
 }

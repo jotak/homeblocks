@@ -21,7 +21,7 @@ SOFTWARE.
 "use strict";
 
 interface Link {
-    title: String,
-    url: String,
-    description?: String
+    title: string,
+    url: string,
+    description?: string
 }

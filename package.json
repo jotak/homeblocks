@@ -5,6 +5,7 @@
     "main"         : "main.js",
     "author"       : "Joël Takvorian <joel.takvorian@qaraywa.net> (https://github.com/jotak)",
     "dependencies" : {
+        "q"          : ">=1.0.0",
         "express"    : "~4.13.3",
         "body-parser": "~1.13.3"
     },

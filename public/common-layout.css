@@ -16,7 +16,6 @@ body {
 }
 
 .block {
-    border: 2px solid #333;
     padding-top: 8px;
     position: absolute;
     top: 50%;
@@ -40,10 +39,8 @@ body {
 .block a {
     font-weight: bold;
     text-decoration: none;
-}
-
-.block a:link {
     color: #1abc9c;
+    cursor: pointer;
 }
 
 .block a:visited {
@@ -58,14 +55,40 @@ body {
     color: #e0e000;
 }
 
-.block li a {
-    cursor: pointer;
-}
-
 .block li .fa-trash {
     margin-left: 5px;
 }
 
 .hidden {
     display: none;
+}
+
+.btn-north,
+.btn-south,
+.btn-east,
+.btn-west {
+    position: absolute;
+    font-size: 1.4em;
+    margin-left: -10px;
+    margin-top: -14px;
+}
+
+.btn-north {
+    top: 0;
+    left: 100px;
+}
+
+.btn-south {
+    top: 200px;
+    left: 100px;
+}
+
+.btn-east {
+    top: 100px;
+    left: 200px;
+}
+
+.btn-west {
+    top: 100px;
+    left: 0;
 }
