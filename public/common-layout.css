@@ -59,6 +59,10 @@ body {
     margin-left: 5px;
 }
 
+.block input {
+    z-index: 2;
+}
+
 .hidden {
     display: none;
 }

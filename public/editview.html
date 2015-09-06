@@ -12,8 +12,10 @@
             <input type='button' value='Ok' ng-click="onSaveBlock(block);">
         </div>
         <span ng-if="block.id == 0">
-            Welcome in edit view, {{ username }}!<br/><br/><br/>
-            <input type='button' value='Back' ng-click='viewMode()'>
+            Welcome in edit view, {{ username }}!&nbsp;
+            <a ng-click="viewMode()" ng-mouseover="profile.message='Switch to view mode'"><i class="fa fa-eye"></i></a>&nbsp;
+            <br/><br/>
+            <div ng-bind-html="profile.message"></div>
         </span>
         <ul ng-if="block.id != 0">
             <li ng-repeat="link in block.links">

@@ -22,6 +22,7 @@ SOFTWARE.
 // Declare app level module which depends on views, and components
 angular.module('linkage', [
     'ngRoute',
+    'ngSanitize',
     'linkage.mainview',
     'linkage.editview'
 ])
@@ -32,10 +33,15 @@ angular.module('linkage', [
 function initListeners($scope, $location, $http) {
     $scope.viewMode = function() {
         $location.path("/v/" + $scope.username);
-    }
+    };
     $scope.editMode = function() {
         $location.path("/e/" + $scope.username);
-    }
+    };
+    $scope.onDuplicate = function(newName) {
+        $scope.profile.username = newName;
+        saveProfile($http, newName, $scope.profile);
+        $location.path("/v/" + newName);
+    };
     initEditListeners($scope, $http);
 }
 
@@ -72,6 +78,7 @@ function saveProfile($http, username, profile) {
             console.log("Profile has been saved: " + response);
         })
         .error(function(data) {
-            console.log('Error: ' + data);
+            console.error('Error: ' + data);
+            profile.message = 'Error: ' + data;
         });
 }

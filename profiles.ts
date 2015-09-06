@@ -44,7 +44,7 @@ class Profiles {
 
     static save(username: string, profile: Profile): q.Promise<string> {
         var deferred: q.Deferred<string> = q.defer<string>();
-        fs.writeFile(Profiles.path(username), JSON.stringify(profile), function(err) {
+        fs.writeFile(Profiles.path(username), JSON.stringify(Profiles.copyProfile(profile)), function(err) {
             if (err) {
                 deferred.reject(new Error(err.code));
             } else {
@@ -66,6 +66,54 @@ class Profiles {
                 blocks: []
             }
         }
+    }
+
+    private static copyProfile(profile: Profile): Profile {
+        // Eliminate any unnecessary field
+        return {
+            username: profile.username,
+            hashedPass: profile.hashedPass,
+            page: Profiles.copyPage(profile.page)
+        };
+    }
+
+    private static copyPage(page: Page): Page {
+        // Eliminate any unnecessary field
+        return {
+            mainBlock: Profiles.copyBlock(page.mainBlock),
+            blocks: page.blocks.map(function(block: CustomBlock) {
+                return Profiles.copyCustomBlock(block);
+            })
+        };
+    }
+
+    private static copyBlock(block: Block): Block {
+        // Eliminate any unnecessary field
+        return {
+            posx: block.posx,
+            posy: block.posy
+        };
+    }
+
+    private static copyCustomBlock(block: CustomBlock): CustomBlock {
+        // Eliminate any unnecessary field
+        return {
+            posx: block.posx,
+            posy: block.posy,
+            title: block.title,
+            links: block.links.map(function(link: Link) {
+                return Profiles.copyLink(link);
+            })
+        };
+    }
+
+    private static copyLink(link: Link): Link {
+        // Eliminate any unnecessary field
+        return {
+            title: link.title,
+            url: link.url,
+            description: link.description
+        };
     }
 }
 export = Profiles
