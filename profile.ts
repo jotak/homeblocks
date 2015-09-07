@@ -20,8 +20,8 @@ SOFTWARE.
 "use strict";
 
 interface Profile {
-    username: String,
-    hashedPass: String,
+    username: string,
+    password: string,
     page: Page
 }
 export = Profile

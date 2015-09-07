@@ -32,15 +32,45 @@ angular.module('linkage', [
 
 function initListeners($scope, $location, $http) {
     $scope.viewMode = function() {
+        $scope.token = "";
         $location.path("/v/" + $scope.username);
     };
-    $scope.editMode = function() {
-        $location.path("/e/" + $scope.username);
+    $scope.editMode = function(password) {
+        $scope.token = "";
+        $http.post('/api/auth', { username: $scope.username, password: password })
+            .success(function(token) {
+                $location.path("/e/" + $scope.username + "/" + token);
+            })
+            .error(function(err) {
+                console.error('Error: ' + err);
+                $scope.profile.message = 'Error: ' + err;
+            });
     };
-    $scope.onDuplicate = function(newName) {
-        $scope.profile.username = newName;
-        saveProfile($http, newName, $scope.profile);
-        $location.path("/v/" + newName);
+    $scope.onNew = function(username, password) {
+        $http.put('/api/profile', { username: username, password: password })
+            .success(function(token) {
+                $location.path("/e/" + username + "/" + token);
+            })
+            .error(function(err) {
+                console.error(err);
+                $scope.profile.message = err;
+            });
+    };
+    $scope.onDuplicate = function(username, password) {
+        $http.put('/api/profile', { username: username, password: password })
+            .success(function(token) {
+                $scope.profile.username = username;
+                saveProfile($http, token, $scope.profile).then(function() {
+                    $location.path("/v/" + username);
+                }).fail(function(err) {
+                    console.error(err);
+                    $scope.profile.message = err;
+                }).done();
+            })
+            .error(function(err) {
+                console.error(err);
+                $scope.profile.message = err;
+            });
     };
     initEditListeners($scope, $http);
 }
@@ -72,13 +102,14 @@ function findBlockByPosition(blocks, x, y) {
     return null;
 }
 
-function saveProfile($http, username, profile) {
-    $http.post('/api/' + username, {profile: profile})
+function saveProfile($http, token, profile) {
+    var deferred = Q.defer();
+    $http.post('/api/profile', { token: token, profile: profile })
         .success(function(response) {
-            console.log("Profile has been saved: " + response);
+            deferred.resolve(true);
         })
-        .error(function(data) {
-            console.error('Error: ' + data);
-            profile.message = 'Error: ' + data;
+        .error(function(err) {
+            deferred.reject('Error: ' + err);
         });
+    return deferred.promise;
 }

@@ -29,7 +29,7 @@ angular.module('linkage.mainview', ['ngRoute'])
 }])
 .controller("mainViewCtrl", ['$scope','$http','$routeParams','$rootScope','$location', function($scope, $http, $routeParams, $rootScope, $location) {
     $rootScope.title = "Linkage - " + $routeParams.username;
-    $http.get('/api/' + $routeParams.username)
+    $http.get('/api/profile/' + $routeParams.username)
         .success(function(profile) {
             $scope.profile = profile;
             $scope.username = $routeParams.username;

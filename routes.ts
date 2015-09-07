@@ -18,26 +18,63 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 import express = require('express');
+import crypto = require('crypto');
 import Profile = require('./profile');
 import Profiles = require('./profiles');
 
+var tokens: { [username: string]: string } = {};
+
 export function register(app: express.Application) {
-    app.get("/api/:username", function(req, res) {
-        Profiles.load(req.params.username).then(function(profile: Profile) {
-            res.json(profile);
+
+    app.post("/api/auth", function(req, res) {
+        Profiles.matchPassword(req.body.username, req.body.password).then(function() {
+            // Generate token
+            tokens[req.body.username] = genToken();
+            console.log("Token generated for " + req.body.username + ": " + tokens[req.body.username]);
+            res.send(tokens[req.body.username]);
         }).fail(function(reason: Error) {
-            console.log("Application error: " + reason.message);
-            console.log("Generating new empty profile");
-            res.json(Profiles.generateEmptyProfile(req.params.username))
+            res.status(400).send(reason.message);
         }).done();
     });
 
-    app.post("/api/:username", function(req, res) {
-        if (!checkUsername(req.params.username)) {
+    app.get("/api/profile/:username", function(req, res) {
+        Profiles.load(req.params.username).then(function(profile: Profile) {
+            profile.password = "";
+            res.json(profile);
+        }).fail(function(reason: Error) {
+            console.log("Application error: " + reason.message);
+            res.json(Profiles.generateEmptyProfile(req.params.username, ""))
+        }).done();
+    });
+
+    // CREATE
+    app.put("/api/profile", function(req, res) {
+        if (!checkUsername(req.body.username)) {
             res.status(400).send("Invalid user name");
             return;
         }
-        Profiles.save(req.params.username, req.body.profile).then(function(status: string) {
+        Profiles.create(req.body.username, req.body.password).then(function() {
+            // Generate token
+            tokens[req.body.username] = genToken();
+            console.log("Token generated for " + req.body.username + ": " + tokens[req.body.username]);
+            res.send(tokens[req.body.username]);
+        }).fail(function(reason: Error) {
+            console.log("Application error: " + reason.message);
+            res.status(500).send(String(reason));
+        }).done();
+    });
+
+    // UPDATE
+    app.post("/api/profile", function(req, res) {
+        if (!checkUsername(req.body.profile.username)) {
+            res.status(400).send("Invalid user name");
+            return;
+        }
+        if (!req.body.token || tokens[req.body.profile.username] != req.body.token) {
+            res.status(400).send("You must login first");
+            return;
+        }
+        Profiles.update(req.body.profile).then(function(status: string) {
             res.send(status);
         }).fail(function(reason: Error) {
             console.log("Application error: " + reason.message);
@@ -53,4 +90,8 @@ export function register(app: express.Application) {
 function checkUsername(username: string): boolean {
     var reg = /^[\w]+$/;
     return reg.test(username);
+}
+
+function genToken(): string {
+    return crypto.randomBytes(48).toString('hex');
 }

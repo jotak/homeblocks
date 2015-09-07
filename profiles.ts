@@ -19,6 +19,7 @@ SOFTWARE.
 */
 import q = require("q");
 import fs = require('fs');
+import crypto = require('crypto');
 import Profile = require('./profile');
 
 "use strict";
@@ -35,29 +36,84 @@ class Profiles {
             if (err) {
                 deferred.reject(err);
             } else {
-                var jsonContent: Profile = eval('(' + data + ')');
-                deferred.resolve(jsonContent);
+                var profile: Profile = eval('(' + data + ')');
+                deferred.resolve(profile);
             }
         });
         return deferred.promise;
     }
 
-    static save(username: string, profile: Profile): q.Promise<string> {
+    static create(username: string, password: string): q.Promise<string> {
         var deferred: q.Deferred<string> = q.defer<string>();
-        fs.writeFile(Profiles.path(username), JSON.stringify(Profiles.copyProfile(profile)), function(err) {
+        fs.readFile(Profiles.path(username), {encoding: "utf8"}, function(err, data) {
             if (err) {
-                deferred.reject(new Error(err.code));
+                if (err.code == "ENOENT") {
+                    Profiles.hash(password).then(function(hash: string) {
+                        var profile: Profile = Profiles.generateEmptyProfile(username, hash);
+                        fs.writeFile(Profiles.path(profile.username), JSON.stringify(Profiles.copyProfile(profile)), function(err) {
+                            if (err) {
+                                deferred.reject(new Error(err.code));
+                            } else {
+                                deferred.resolve("");
+                            }
+                        });
+                    }).fail(function(err) {
+                        deferred.reject(err);
+                    }).done();
+                } else {
+                    deferred.reject(err);
+                }
             } else {
-                deferred.resolve("OK");
+                deferred.reject(new Error("Profile " + username + " already exists"));
             }
         });
         return deferred.promise;
     }
 
-    static generateEmptyProfile(username: string): Profile {
+    static update(profile: Profile): q.Promise<string> {
+        var deferred: q.Deferred<string> = q.defer<string>();
+        Profiles.load(profile.username).then(function(old: Profile) {
+            profile.password = old.password;
+            fs.writeFile(Profiles.path(profile.username), JSON.stringify(Profiles.copyProfile(profile)), function(err) {
+                if (err) {
+                    deferred.reject(new Error(err.code));
+                } else {
+                    deferred.resolve("OK");
+                }
+            });
+        }).fail(function(err) {
+            deferred.reject(err);
+        }).done();
+        return deferred.promise;
+    }
+
+    static matchPassword(username: string, password: string): q.Promise<string> {
+        var deferred: q.Deferred<string> = q.defer<string>();
+        // Match password
+        Profiles.hash(password).then(function(hash: string) {
+            Profiles.load(username).then(function(old: Profile) {
+                if (!old.password) {
+                    deferred.resolve("");
+                } else {
+                    if (hash == old.password) {
+                        deferred.resolve("");
+                    } else {
+                        deferred.reject(new Error("Authentication failure."));
+                    }
+                }
+            }).fail(function(err) {
+                deferred.reject(err);
+            }).done();
+        }).fail(function(err) {
+            deferred.reject(new Error("Could not get salt. Persistence disabled."));
+        }).done();
+        return deferred.promise;
+    }
+
+    static generateEmptyProfile(username: string, password: string): Profile {
         return {
             username: username,
-            hashedPass: "",
+            password: password,
             page: {
                 mainBlock: {
                     posx: 0,
@@ -72,7 +128,7 @@ class Profiles {
         // Eliminate any unnecessary field
         return {
             username: profile.username,
-            hashedPass: profile.hashedPass,
+            password: profile.password,
             page: Profiles.copyPage(profile.page)
         };
     }
@@ -114,6 +170,21 @@ class Profiles {
             url: link.url,
             description: link.description
         };
+    }
+
+    private static hash(password: string): q.Promise<string> {
+        var deferred: q.Deferred<string> = q.defer<string>();
+        fs.readFile("salt", {encoding: "utf8"}, function(err, data) {
+            if (err) {
+                deferred.reject(err);
+            } else {
+                var hash: string = crypto.createHash('sha256')
+                    .update(password)
+                    .digest("hex");
+                deferred.resolve(hash);
+            }
+        });
+        return deferred.promise;
     }
 }
 export = Profiles
