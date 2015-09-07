@@ -52,7 +52,7 @@ class Profiles {
                         var profile: Profile = Profiles.generateEmptyProfile(username, hash);
                         fs.writeFile(Profiles.path(profile.username), JSON.stringify(Profiles.copyProfile(profile)), function(err) {
                             if (err) {
-                                deferred.reject(new Error(err.code));
+                                deferred.reject(err);
                             } else {
                                 deferred.resolve("");
                             }
@@ -76,7 +76,7 @@ class Profiles {
             profile.password = old.password;
             fs.writeFile(Profiles.path(profile.username), JSON.stringify(Profiles.copyProfile(profile)), function(err) {
                 if (err) {
-                    deferred.reject(new Error(err.code));
+                    deferred.reject(err);
                 } else {
                     deferred.resolve("OK");
                 }
