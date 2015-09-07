@@ -31,6 +31,7 @@ class Profiles {
     }
 
     static load(username: string): q.Promise<Profile> {
+        console.log("loading: " + username);
         var deferred: q.Deferred<Profile> = q.defer<Profile>();
         fs.readFile(Profiles.path(username), {encoding: "utf8"}, function(err, data) {
             if (err) {
@@ -44,6 +45,7 @@ class Profiles {
     }
 
     static create(username: string, password: string): q.Promise<string> {
+        console.log("creating: " + username);
         var deferred: q.Deferred<string> = q.defer<string>();
         fs.readFile(Profiles.path(username), {encoding: "utf8"}, function(err, data) {
             if (err) {
@@ -71,6 +73,7 @@ class Profiles {
     }
 
     static update(profile: Profile): q.Promise<string> {
+        console.log("updating: " + profile.username);
         var deferred: q.Deferred<string> = q.defer<string>();
         Profiles.load(profile.username).then(function(old: Profile) {
             profile.password = old.password;
@@ -88,6 +91,7 @@ class Profiles {
     }
 
     static matchPassword(username: string, password: string): q.Promise<string> {
+        console.log("matching password: " + username);
         var deferred: q.Deferred<string> = q.defer<string>();
         // Match password
         Profiles.hash(password).then(function(hash: string) {

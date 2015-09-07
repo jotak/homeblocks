@@ -57,9 +57,11 @@ function initListeners($scope, $location, $http) {
             });
     };
     $scope.onDuplicate = function(username, password) {
+        console.log("Ducplicate: " + username);
         $http.put('/api/profile', { username: username, password: password })
             .success(function(token) {
                 $scope.profile.username = username;
+                $scope.profile.password = password;
                 saveProfile($http, token, $scope.profile).then(function() {
                     $location.path("/v/" + username);
                 }).fail(function(err) {

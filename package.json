@@ -2,14 +2,19 @@
     "name"         : "linkage",
     "version"      : "0.1.0",
     "description"  : "Links management",
-    "main"         : "main.js",
     "author"       : "Joël Takvorian <joel.takvorian@qaraywa.net> (https://github.com/jotak)",
+    "repository"   : {
+        "type"       : "git",
+        "url"        : "https://github.com/jotak/linkage"
+    },
+    "main"         : "main.js",
     "dependencies" : {
         "q"          : ">=1.0.0",
         "express"    : "~4.13.3",
         "body-parser": "~1.13.3"
     },
-    "engines": {
-        "node": ">=0.10.0"
-    }
+    "engines"      : {
+        "node"       : ">=0.10.0"
+    },
+    "license"      : "MIT"
 }

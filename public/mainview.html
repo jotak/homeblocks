@@ -18,9 +18,9 @@
                 <input type='button' value='Ok' ng-click="editMode(pwd);">
             </div>
             <div ng-class="{'hidden': !showDuplicate }">
-                <input type='text' placeholder='Name' ng-model='newName'><br/>
-                <input type='password' placeholder='Password' ng-model='newPwd'><br/>
-                <input type='button' value='Ok' ng-click="onDuplicate(duplicateName, newPwd);">
+                <input type='text' placeholder='Name' ng-model='dupName'><br/>
+                <input type='password' placeholder='Password' ng-model='dupPwd'><br/>
+                <input type='button' value='Ok' ng-click="onDuplicate(dupName, dupPwd);">
             </div>
             <br/><br/>
             <div ng-bind-html="profile.message"></div>
