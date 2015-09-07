@@ -1,7 +1,8 @@
 #!/bin/bash
 
-cp package.json generated_js/
-rm generated_js/public/*.css
-rm generated_js/public/*.html
-cp public/*.css generated_js/public
-cp public/*.html generated_js/public
+cp package.json ../linkage_js/
+cp Procfile ../linkage_js/
+rm ../linkage_js/public/*.css
+rm ../linkage_js/public/*.html
+cp public/*.css ../linkage_js/public
+cp public/*.html ../linkage_js/public

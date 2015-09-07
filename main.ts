@@ -1,6 +1,6 @@
 /*
 The MIT License (MIT)
-Copyright (c) 2014 Joel Takvorian, https://github.com/jotak/mipod
+Copyright (c) 2015 Joel Takvorian, https://github.com/jotak/linkage
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -24,7 +24,7 @@ import routes = require('./routes');
 "use strict";
 
 // Init web server
-var port: Number = 8080;
+var port: Number = (process.env.PORT || 5000);
 var app: express.Application = express();
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());

@@ -57,7 +57,6 @@ function initListeners($scope, $location, $http) {
             });
     };
     $scope.onDuplicate = function(username, password) {
-        console.log("Ducplicate: " + username);
         $http.put('/api/profile', { username: username, password: password })
             .success(function(token) {
                 $scope.profile.username = username;
@@ -68,6 +67,24 @@ function initListeners($scope, $location, $http) {
                     console.error(err);
                     $scope.profile.message = err;
                 }).done();
+                $scope.profile.password = "";
+            })
+            .error(function(err) {
+                console.error(err);
+                $scope.profile.message = err;
+            });
+    };
+    $scope.onUpload = function(uploaded) {
+        $scope.profile = eval('(' + uploaded + ')');
+        $http.put('/api/profile', { username: $scope.profile.username, password: $scope.profile.password })
+            .success(function(token) {
+                saveProfile($http, token, $scope.profile).then(function() {
+                    $location.path("/v/" + $scope.profile.username);
+                }).fail(function(err) {
+                    console.error(err);
+                    $scope.profile.message = err;
+                }).done();
+                $scope.profile.password = "";
             })
             .error(function(err) {
                 console.error(err);

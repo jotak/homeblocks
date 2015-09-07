@@ -1,6 +1,6 @@
 /*
 The MIT License (MIT)
-Copyright (c) 2014 Joel Takvorian, https://github.com/jotak/mipod
+Copyright (c) 2015 Joel Takvorian, https://github.com/jotak/linkage
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -27,7 +27,6 @@ var tokens: { [username: string]: string } = {};
 export function register(app: express.Application) {
 
     app.post("/api/auth", function(req, res) {
-        console.log("routing auth: " + req.body.username);
         Profiles.matchPassword(req.body.username, req.body.password).then(function() {
             // Generate token
             tokens[req.body.username] = genToken();
@@ -39,7 +38,6 @@ export function register(app: express.Application) {
     });
 
     app.get("/api/profile/:username", function(req, res) {
-        console.log("routing get: " + req.params.username);
         Profiles.load(req.params.username).then(function(profile: Profile) {
             profile.password = "";
             res.json(profile);
@@ -51,7 +49,6 @@ export function register(app: express.Application) {
 
     // CREATE
     app.put("/api/profile", function(req, res) {
-        console.log("routing put: " + req.body.username);
         if (!checkUsername(req.body.username)) {
             res.status(400).send("Invalid user name");
             return;
@@ -69,7 +66,6 @@ export function register(app: express.Application) {
 
     // UPDATE
     app.post("/api/profile", function(req, res) {
-        console.log("routing post: " + req.body.profile.username);
         if (!checkUsername(req.body.profile.username)) {
             res.status(400).send("Invalid user name");
             return;

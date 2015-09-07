@@ -13,7 +13,7 @@
         "noLib": false,
         "preserveConstEnums": true,
         "suppressImplicitAnyIndexErrors": true,
-        "outDir": "generated_js"
+        "outDir": "../linkage_js"
     },
     "filesGlob": [
         "./**/*.ts",

@@ -4,10 +4,10 @@
     <div class="block" style="{{ block.style }}" ng-repeat="block in blocks">
         <div class="block-title" ng-if="block.title">{{ block.title }}</div>
         <span ng-if="block.id == 0">
-            Welcome {{ username }}!<br/>
             <a ng-click="showNew = !showNew" ng-mouseover="profile.message='Create a new profile'"><i class="fa fa-file-o"></i></a>&nbsp;
             <a ng-click="showEdit = !showEdit" ng-mouseover="profile.message='Switch to edit mode'"><i class="fa fa-pencil-square-o"></i></a>&nbsp;
-            <a ng-click="showDuplicate = !showDuplicate" ng-mouseover="profile.message='Duplicate this profile'"><i class="fa fa-files-o"></i></a>
+            <a ng-click="showDuplicate = !showDuplicate" ng-mouseover="profile.message='Duplicate this profile'"><i class="fa fa-files-o"></i></a>&nbsp;
+            <a ng-click="showUpload = !showUpload" ng-mouseover="profile.message='Upload profile from json'"><i class="fa fa-cloud-upload"></i></a>
             <div ng-class="{'hidden': !showNew }">
                 <input type='text' placeholder='Name' ng-model='newName'><br/>
                 <input type='password' placeholder='Password' ng-model='newPwd'><br/>
@@ -22,8 +22,12 @@
                 <input type='password' placeholder='Password' ng-model='dupPwd'><br/>
                 <input type='button' value='Ok' ng-click="onDuplicate(dupName, dupPwd);">
             </div>
+            <div ng-class="{'hidden': !showUpload }">
+                <textarea ng-model='uploadProfile'></textarea><br/>
+                <input type='button' value='Ok' ng-click="onUpload(uploadProfile);">
+            </div>
             <br/><br/>
-            <div ng-bind-html="profile.message"></div>
+            <div ng-bind-html="profile.message || 'Welcome ' + username + '!'"></div>
         </span>
         <ul ng-if="block.id != 0">
             <li ng-repeat="link in block.links">

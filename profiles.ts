@@ -1,6 +1,6 @@
 /*
 The MIT License (MIT)
-Copyright (c) 2014 Joel Takvorian, https://github.com/jotak/mipod
+Copyright (c) 2015 Joel Takvorian, https://github.com/jotak/linkage
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -31,7 +31,6 @@ class Profiles {
     }
 
     static load(username: string): q.Promise<Profile> {
-        console.log("loading: " + username);
         var deferred: q.Deferred<Profile> = q.defer<Profile>();
         fs.readFile(Profiles.path(username), {encoding: "utf8"}, function(err, data) {
             if (err) {
@@ -45,7 +44,6 @@ class Profiles {
     }
 
     static create(username: string, password: string): q.Promise<string> {
-        console.log("creating: " + username);
         var deferred: q.Deferred<string> = q.defer<string>();
         fs.readFile(Profiles.path(username), {encoding: "utf8"}, function(err, data) {
             if (err) {
@@ -73,7 +71,6 @@ class Profiles {
     }
 
     static update(profile: Profile): q.Promise<string> {
-        console.log("updating: " + profile.username);
         var deferred: q.Deferred<string> = q.defer<string>();
         Profiles.load(profile.username).then(function(old: Profile) {
             profile.password = old.password;
@@ -90,28 +87,21 @@ class Profiles {
         return deferred.promise;
     }
 
-    static matchPassword(username: string, password: string): q.Promise<string> {
-        console.log("matching password: " + username);
-        var deferred: q.Deferred<string> = q.defer<string>();
+    static matchPassword(username: string, password: string): q.Promise<boolean> {
         // Match password
-        Profiles.hash(password).then(function(hash: string) {
-            Profiles.load(username).then(function(old: Profile) {
-                if (!old.password) {
-                    deferred.resolve("");
+        return Profiles.hash(password).then(function(hash: string) {
+            return Profiles.load(username).then(function(old: Profile) {
+                if (old.password === "") {
+                    return true;
                 } else {
                     if (hash == old.password) {
-                        deferred.resolve("");
+                        return true;
                     } else {
-                        deferred.reject(new Error("Authentication failure."));
+                        throw new Error("Authentication failure.");
                     }
                 }
-            }).fail(function(err) {
-                deferred.reject(err);
-            }).done();
-        }).fail(function(err) {
-            deferred.reject(new Error("Could not get salt. Persistence disabled."));
-        }).done();
-        return deferred.promise;
+            });
+        });
     }
 
     static generateEmptyProfile(username: string, password: string): Profile {
@@ -177,15 +167,33 @@ class Profiles {
     }
 
     private static hash(password: string): q.Promise<string> {
+        if (password === undefined || password === "") {
+            return q.fcall<string>(function() { return ""; });
+        }
+        return Profiles.getSalt().then(function(salt) {
+            return crypto.pbkdf2Sync(password, salt, 30, 1024).toString('hex');
+        });
+    }
+
+    private static getSalt(): q.Promise<string> {
         var deferred: q.Deferred<string> = q.defer<string>();
         fs.readFile("salt", {encoding: "utf8"}, function(err, data) {
             if (err) {
-                deferred.reject(err);
+                if (err.code == "ENOENT") {
+                    console.log("Salt not found, generating random salt")
+                    var salt: string = crypto.randomBytes(48).toString('hex');
+                    fs.writeFile("salt", salt, function(err) {
+                        if (err) {
+                            deferred.reject(new Error("Could not write salt. Persistence disabled."));
+                        } else {
+                            deferred.resolve(salt);
+                        }
+                    });
+                } else {
+                    deferred.reject(new Error("Could not get salt. Persistence disabled."));
+                }
             } else {
-                var hash: string = crypto.createHash('sha256')
-                    .update(password)
-                    .digest("hex");
-                deferred.resolve(hash);
+                deferred.resolve(data);
             }
         });
         return deferred.promise;
