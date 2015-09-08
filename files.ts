@@ -17,20 +17,41 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-import express = require('express');
-import bodyParser = require('body-parser');
-import routes = require('./routes');
-import Profiles = require('./profiles');
-import Files = require('./files');
+import q = require("q");
+import fs = require('fs');
 
 "use strict";
 
-// Init web server
-var port: Number = (process.env.PORT || 5000);
-var app: express.Application = express();
-app.use(express.static(__dirname + '/public'));
-app.use(bodyParser.json());
-routes.register(app, new Profiles(new Files("")));
-app.listen(port);
+class Files {
+    private root: string;
 
-console.log("Application listens on " + port);
+    constructor(root: string) {
+        console.log("File system initialized with root " + root);
+        this.root = root;
+    }
+
+    public read(relativePath: string): q.Promise<string> {
+        var deferred: q.Deferred<string> = q.defer<string>();
+        fs.readFile(this.root + relativePath, {encoding: "utf8"}, function(err, data) {
+            if (err) {
+                deferred.reject(err);
+            } else {
+                deferred.resolve(data);
+            }
+        });
+        return deferred.promise;
+    }
+
+    public write(relativePath: string, content: string): q.Promise<boolean> {
+        var deferred: q.Deferred<boolean> = q.defer<boolean>();
+        fs.writeFile(this.root + relativePath, content, function(err) {
+            if (err) {
+                deferred.reject(err);
+            } else {
+                deferred.resolve(true);
+            }
+        });
+        return deferred.promise;
+    }
+}
+export = Files

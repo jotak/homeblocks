@@ -24,10 +24,10 @@ import Profiles = require('./profiles');
 
 var tokens: { [username: string]: string } = {};
 
-export function register(app: express.Application) {
+export function register(app: express.Application, profiles: Profiles) {
 
     app.post("/api/auth", function(req, res) {
-        Profiles.matchPassword(req.body.username, req.body.password).then(function() {
+        profiles.matchPassword(req.body.username, req.body.password).then(function() {
             // Generate token
             tokens[req.body.username] = genToken();
             console.log("Token generated for " + req.body.username + ": " + tokens[req.body.username]);
@@ -38,7 +38,7 @@ export function register(app: express.Application) {
     });
 
     app.get("/api/profile/:username", function(req, res) {
-        Profiles.load(req.params.username).then(function(profile: Profile) {
+        profiles.load(req.params.username).then(function(profile: Profile) {
             profile.password = "";
             res.json(profile);
         }).fail(function(reason: Error) {
@@ -53,7 +53,7 @@ export function register(app: express.Application) {
             res.status(400).send("Invalid user name");
             return;
         }
-        Profiles.create(req.body.username, req.body.password).then(function() {
+        profiles.create(req.body.username, req.body.password).then(function() {
             // Generate token
             tokens[req.body.username] = genToken();
             console.log("Token generated for " + req.body.username + ": " + tokens[req.body.username]);
@@ -74,7 +74,7 @@ export function register(app: express.Application) {
             res.status(400).send("You must login first");
             return;
         }
-        Profiles.update(req.body.profile).then(function(status: string) {
+        profiles.update(req.body.profile).then(function(status: boolean) {
             res.send(status);
         }).fail(function(reason: Error) {
             console.log("Application error: " + reason.message);

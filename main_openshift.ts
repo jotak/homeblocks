@@ -20,6 +20,8 @@ SOFTWARE.
 import express = require('express');
 import bodyParser = require('body-parser');
 import routes = require('./routes');
+import Profiles = require('./profiles');
+import Files = require('./files');
 
 "use strict";
 
@@ -91,7 +93,7 @@ class Server {
         this.app = express();
         this.app.use(express.static(__dirname + '/public'));
         this.app.use(bodyParser.json());
-        routes.register(this.app);
+        routes.register(this.app, new Profiles(new Files(process.env.OPENSHIFT_DATA_DIR || "")));
     }
 
     /**

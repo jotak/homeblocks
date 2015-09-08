@@ -26,6 +26,7 @@
     ],
     "files": [
         "./block.ts",
+        "./files.ts",
         "./link.ts",
         "./main.ts",
         "./main_openshift.ts",

@@ -18,79 +18,66 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 import q = require("q");
-import fs = require('fs');
 import crypto = require('crypto');
+import Files = require('./files');
 import Profile = require('./profile');
 
 "use strict";
 
 class Profiles {
 
+    private files: Files;
+
+    constructor(files: Files) {
+        this.files = files;
+    }
+
     private static path(username: string): string {
         return "profiles/" + username + ".json";
     }
 
-    static load(username: string): q.Promise<Profile> {
-        var deferred: q.Deferred<Profile> = q.defer<Profile>();
-        fs.readFile(Profiles.path(username), {encoding: "utf8"}, function(err, data) {
-            if (err) {
-                deferred.reject(err);
-            } else {
-                var profile: Profile = eval('(' + data + ')');
-                deferred.resolve(profile);
-            }
+    public load(username: string): q.Promise<Profile> {
+        return this.files.read(Profiles.path(username)).then(function(content: string) {
+            var profile: Profile = eval('(' + content + ')');
+            return profile;
         });
-        return deferred.promise;
     }
 
-    static create(username: string, password: string): q.Promise<string> {
-        var deferred: q.Deferred<string> = q.defer<string>();
-        fs.readFile(Profiles.path(username), {encoding: "utf8"}, function(err, data) {
-            if (err) {
-                if (err.code == "ENOENT") {
-                    Profiles.hash(password).then(function(hash: string) {
-                        var profile: Profile = Profiles.generateEmptyProfile(username, hash);
-                        fs.writeFile(Profiles.path(profile.username), JSON.stringify(Profiles.copyProfile(profile)), function(err) {
-                            if (err) {
-                                deferred.reject(err);
-                            } else {
-                                deferred.resolve("");
-                            }
-                        });
-                    }).fail(function(err) {
-                        deferred.reject(err);
-                    }).done();
-                } else {
-                    deferred.reject(err);
-                }
-            } else {
-                deferred.reject(new Error("Profile " + username + " already exists"));
-            }
-        });
-        return deferred.promise;
-    }
-
-    static update(profile: Profile): q.Promise<string> {
-        var deferred: q.Deferred<string> = q.defer<string>();
-        Profiles.load(profile.username).then(function(old: Profile) {
-            profile.password = old.password;
-            fs.writeFile(Profiles.path(profile.username), JSON.stringify(Profiles.copyProfile(profile)), function(err) {
-                if (err) {
-                    deferred.reject(err);
-                } else {
-                    deferred.resolve("OK");
-                }
-            });
+    public create(username: string, password: string): q.Promise<boolean> {
+        var self = this;
+        var deferred: q.Deferred<boolean> = q.defer<boolean>();
+        self.files.read(Profiles.path(username)).then(function(content) {
+            deferred.reject(new Error("Profile " + username + " already exists"));
         }).fail(function(err) {
-            deferred.reject(err);
+            if (err.code == "ENOENT") {
+                self.hash(password).then(function(hash: string) {
+                    var profile: Profile = Profiles.generateEmptyProfile(username, hash);
+                    self.files.write(Profiles.path(profile.username), JSON.stringify(Profiles.copyProfile(profile))).then(function() {
+                        deferred.resolve(true);
+                    })
+                }).fail(function(err) {
+                    deferred.reject(err);
+                }).done();
+            } else {
+                deferred.reject(err);
+            }
         }).done();
         return deferred.promise;
     }
 
-    static matchPassword(username: string, password: string): q.Promise<boolean> {
+    public update(profile: Profile): q.Promise<boolean> {
+        var self = this;
+        return self.load(profile.username).then(function(old: Profile) {
+            profile.password = old.password;
+            return self.files.write(Profiles.path(profile.username), JSON.stringify(Profiles.copyProfile(profile)));
+        });
+    }
+
+    public matchPassword(username: string, password: string): q.Promise<boolean> {
+        var self = this;
         // Match password
-        return Profiles.hash(password).then(function(hash: string) {
-            return Profiles.load(username).then(function(old: Profile) {
+        return self.hash(password).then(function(hash: string) {
+            return self.load(username).then(function(old: Profile) {
                 if (old.password === "") {
                     return true;
                 } else {
@@ -166,36 +153,33 @@ class Profiles {
         };
     }
 
-    private static hash(password: string): q.Promise<string> {
+    private hash(password: string): q.Promise<string> {
         if (password === undefined || password === "") {
             return q.fcall<string>(function() { return ""; });
         }
-        return Profiles.getSalt().then(function(salt) {
+        return this.getSalt().then(function(salt) {
             return crypto.pbkdf2Sync(password, salt, 30, 1024).toString('hex');
         });
     }
 
-    private static getSalt(): q.Promise<string> {
+    private getSalt(): q.Promise<string> {
+        var self = this;
         var deferred: q.Deferred<string> = q.defer<string>();
-        fs.readFile("salt", {encoding: "utf8"}, function(err, data) {
-            if (err) {
-                if (err.code == "ENOENT") {
-                    console.log("Salt not found, generating random salt")
-                    var salt: string = crypto.randomBytes(48).toString('hex');
-                    fs.writeFile("salt", salt, function(err) {
-                        if (err) {
-                            deferred.reject(new Error("Could not write salt. Persistence disabled."));
-                        } else {
-                            deferred.resolve(salt);
-                        }
-                    });
-                } else {
-                    deferred.reject(new Error("Could not get salt. Persistence disabled."));
-                }
+        self.files.read("salt").then(function(content) {
+            deferred.resolve(content);
+        }).fail(function(err) {
+            if (err.code == "ENOENT") {
+                console.log("Salt not found, generating random salt")
+                var salt: string = crypto.randomBytes(48).toString('hex');
+                self.files.write("salt", salt).then(function() {
+                    deferred.resolve(salt);
+                }).fail(function(err) {
+                    deferred.reject(new Error("Could not write salt. Persistence disabled."));
+                }).done();
             } else {
-                deferred.resolve(data);
+                deferred.reject(new Error("Could not get salt. Persistence disabled."));
             }
-        });
+        }).done();
         return deferred.promise;
     }
 }
