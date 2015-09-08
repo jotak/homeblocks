@@ -30,70 +30,6 @@ angular.module('linkage', [
     $routeProvider.otherwise({redirectTo: '/v/sandbox'});
 }]);
 
-function initListeners($scope, $location, $http) {
-    $scope.viewMode = function() {
-        $scope.token = "";
-        $location.path("/v/" + $scope.username);
-    };
-    $scope.editMode = function(password) {
-        $scope.token = "";
-        $http.post('/api/auth', { username: $scope.username, password: password })
-            .success(function(token) {
-                $location.path("/e/" + $scope.username + "/" + token);
-            })
-            .error(function(err) {
-                console.error('Error: ' + err);
-                $scope.profile.message = 'Error: ' + err;
-            });
-    };
-    $scope.onNew = function(username, password) {
-        $http.put('/api/profile', { username: username, password: password })
-            .success(function(token) {
-                $location.path("/e/" + username + "/" + token);
-            })
-            .error(function(err) {
-                console.error(err);
-                $scope.profile.message = err;
-            });
-    };
-    $scope.onDuplicate = function(username, password) {
-        $http.put('/api/profile', { username: username, password: password })
-            .success(function(token) {
-                $scope.profile.username = username;
-                $scope.profile.password = password;
-                saveProfile($http, token, $scope.profile).then(function() {
-                    $location.path("/v/" + username);
-                }).fail(function(err) {
-                    console.error(err);
-                    $scope.profile.message = err;
-                }).done();
-                $scope.profile.password = "";
-            })
-            .error(function(err) {
-                console.error(err);
-                $scope.profile.message = err;
-            });
-    };
-    $scope.onUpload = function(uploaded) {
-        $scope.profile = eval('(' + uploaded + ')');
-        $http.put('/api/profile', { username: $scope.profile.username, password: $scope.profile.password })
-            .success(function(token) {
-                saveProfile($http, token, $scope.profile).then(function() {
-                    $location.path("/v/" + $scope.profile.username);
-                }).fail(function(err) {
-                    console.error(err);
-                    $scope.profile.message = err;
-                }).done();
-                $scope.profile.password = "";
-            })
-            .error(function(err) {
-                console.error(err);
-                $scope.profile.message = err;
-            });
-    };
-    initEditListeners($scope, $http);
-}
-
 function computePositions(blocks) {
     var map = {};
     // First pass: fill map
@@ -131,4 +67,44 @@ function saveProfile($http, token, profile) {
             deferred.reject('Error: ' + err);
         });
     return deferred.promise;
+}
+
+function fillPageStyle(blocks) {
+    computePositions(blocks);
+    var id = 0;
+    var minPos = {x: 0, y: 0};
+    // If minimum positions are negative, some part of the blocks would be hidden => we will shift them
+    for (var i in blocks) {
+        minPos = checkOutOfScreen(blocks[i], minPos);
+    }
+    for (var i in blocks) {
+        fillBlockStyle(blocks[i], id++, minPos);
+    }
+}
+
+function checkOutOfScreen(block, minPos) {
+    var marginLeft = -100 + block.posx * 200;
+    var marginTop = -100 + block.posy * 200;
+    // Compute minimum positions
+    var x = window.innerWidth / 2 + marginLeft;
+    var y = window.innerHeight / 2 + marginTop;
+    if (x < minPos.x) {
+        minPos.x = x;
+    }
+    if (y < minPos.y) {
+        minPos.y = y;
+    }
+    return minPos;
+}
+
+function fillBlockStyle(block, id, minPos) {
+    var marginLeft = -minPos.x - 100 + block.posx * 200;
+    var marginTop = -minPos.y - 100 + block.posy * 200;
+    var color = ((block.posx + block.posy) % 2) ? "#34495e" : "#020202";
+    block.style = "margin-left: " + marginLeft + "px; margin-top: " + marginTop + "px; background-color: " + color;
+    block.NStyle = "margin-left: " + (marginLeft+100) + "px; margin-top: " + marginTop + "px;";
+    block.SStyle = "margin-left: " + (marginLeft+100) + "px; margin-top: " + (marginTop+200) + "px;";
+    block.EStyle = "margin-left: " + (marginLeft+200) + "px; margin-top: " + (marginTop+100) + "px;";
+    block.WStyle = "margin-left: " + marginLeft + "px; margin-top: " + (marginTop+100) + "px;";
+    block.id = id;
 }

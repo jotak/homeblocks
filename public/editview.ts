@@ -36,18 +36,23 @@ angular.module('linkage.editview', ['ngRoute'])
             $scope.token = $routeParams.token;
             $scope.blocks = [profile.page.mainBlock].concat(profile.page.blocks);
             fillPageStyle($scope.blocks);
-            initListeners($scope, $location, $http);
+            initEditListeners($scope, $location, $http);
         })
         .error(function(data) {
             console.log('Error: ' + data);
         });
 }]);
 
-function initEditListeners($scope, $http) {
+function initEditListeners($scope, $location, $http) {
+    $scope.viewMode = function() {
+        $scope.token = "";
+        $location.path("/v/" + $scope.username);
+    };
+
     $scope.onSaveLink = function(link) {
         link.editing = false;
         saveProfile($http, $scope.token, $scope.profile);
-    }
+    };
 
     $scope.onCreateLink = function(block) {
         var link = {
@@ -58,7 +63,7 @@ function initEditListeners($scope, $http) {
         };
         block.links.push(link);
         saveProfile($http, $scope.token, $scope.profile);
-    }
+    };
 
     $scope.onDeleteLink = function(block, link) {
         var index = block.links.indexOf(link);
@@ -66,12 +71,12 @@ function initEditListeners($scope, $http) {
             block.links.splice(index, 1);
             saveProfile($http, $scope.token, $scope.profile);
         }
-    }
+    };
 
     $scope.onSaveBlock = function(block) {
         block.editTitle = false;
         saveProfile($http, $scope.token, $scope.profile);
-    }
+    };
 
     $scope.onCreateBlock = function(x, y) {
         var block = {
@@ -83,7 +88,7 @@ function initEditListeners($scope, $http) {
         $scope.blocks.push(block);
         fillPageStyle($scope.blocks);
         saveProfile($http, $scope.token, $scope.profile);
-    }
+    };
 
     $scope.onSwapBlocks = function(b1, b2x, b2y) {
         var b2 = findBlockByPosition($scope.blocks, b2x, b2y);
@@ -93,7 +98,7 @@ function initEditListeners($scope, $http) {
         b1.posy = b2y;
         fillPageStyle($scope.blocks);
         saveProfile($http, $scope.token, $scope.profile);
-    }
+    };
 
     $scope.onDeleteBlock = function(block) {
         var index = $scope.profile.page.blocks.indexOf(block);
@@ -103,5 +108,5 @@ function initEditListeners($scope, $http) {
             fillPageStyle($scope.blocks);
             saveProfile($http, $scope.token, $scope.profile);
         }
-    }
+    };
 }
