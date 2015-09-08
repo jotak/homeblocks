@@ -45,14 +45,34 @@ angular.module('linkage.mainview', ['ngRoute'])
 function fillPageStyle(blocks) {
     computePositions(blocks);
     var id = 0;
+    var minPos = {x: 0, y: 0};
+    // If minimum positions are negative, some part of the blocks would be hidden => we will shift them
     for (var i in blocks) {
-        fillBlockStyle(blocks[i], id++);
+        minPos = checkOutOfScreen(blocks[i], minPos);
+    }
+    for (var i in blocks) {
+        fillBlockStyle(blocks[i], id++, minPos);
     }
 }
 
-function fillBlockStyle(block, id) {
+function checkOutOfScreen(block, minPos) {
     var marginLeft = -100 + block.posx * 200;
     var marginTop = -100 + block.posy * 200;
+    // Compute minimum positions
+    var x = window.innerWidth / 2 + marginLeft;
+    var y = window.innerHeight / 2 + marginTop;
+    if (x < minPos.x) {
+        minPos.x = x;
+    }
+    if (y < minPos.y) {
+        minPos.y = y;
+    }
+    return minPos;
+}
+
+function fillBlockStyle(block, id, minPos) {
+    var marginLeft = -minPos.x - 100 + block.posx * 200;
+    var marginTop = -minPos.y - 100 + block.posy * 200;
     var color = ((block.posx + block.posy) % 2) ? "#34495e" : "#020202";
     block.style = "margin-left: " + marginLeft + "px; margin-top: " + marginTop + "px; background-color: " + color;
     block.NStyle = "margin-left: " + (marginLeft+100) + "px; margin-top: " + marginTop + "px;";
