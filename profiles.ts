@@ -120,26 +120,26 @@ class Profiles {
     }
 
     static generateSandbox(): Profile {
-        return {
-            username: "sandbox",
-            password: "",
-            page: {
-                mainBlock: {
-                    posx: 0,
-                    posy: 0
-                },
-                blocks: [{
-                    posx: 1,
-                    posy: 0,
-                    title: "Best sites",
-                    links: [{
-                        title: "Linkage",
-                        url: "http://linkage.qaraywa.net/",
-                        description: "An awesome site"
-                    }]
-                }]
-            }
-        }
+        var sandbox: Profile = Profiles.generateEmptyProfile("sandbox", "");
+        sandbox.page.blocks.push({
+            posx: 1,
+            posy: 0,
+            title: "Awesome sites",
+            links: [{
+                title: "Linkage",
+                url: "http://nodejs-lnkg.rhcloud.com/#v/sandbox",
+                description: "Linkage sandbox on OpenShift! Feel free to edit (no password)"
+            },{
+                title: "Linkage/jotak",
+                url: "http://nodejs-lnkg.rhcloud.com/#/v/jotak",
+                description: "My own page"
+            },{
+                title: "Linkage@GitHub",
+                url: "https://github.com/jotak/linkage",
+                description: "Check me out on github!"
+            }]
+        });
+        return sandbox;
     }
 
     private static copyProfile(profile: Profile): Profile {
