@@ -7,7 +7,7 @@
         "type"       : "git",
         "url"        : "https://github.com/jotak/linkage"
     },
-    "main"         : "main.js",
+    "main"         : "main_openshift.js",
     "dependencies" : {
         "q"          : ">=1.0.0",
         "express"    : "~4.13.3",

@@ -28,6 +28,7 @@
         "./block.ts",
         "./link.ts",
         "./main.ts",
+        "./main_openshift.ts",
         "./page.ts",
         "./profile.ts",
         "./profiles.ts",
