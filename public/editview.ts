@@ -65,12 +65,16 @@ function initEditListeners($scope, $location, $http) {
         saveProfile($http, $scope.token, $scope.profile);
     };
 
-    $scope.onDeleteLink = function(block, link) {
-        var index = block.links.indexOf(link);
-        if (index >= 0) {
-            block.links.splice(index, 1);
-            saveProfile($http, $scope.token, $scope.profile);
-        }
+    $scope.onDeleteLink = function(block, index) {
+        block.links.splice(index, 1);
+        saveProfile($http, $scope.token, $scope.profile);
+    };
+
+    $scope.onLinkUp = function(block, index) {
+        var tmp = block.links[index-1];
+        block.links[index-1] = block.links[index];
+        block.links[index] = tmp;
+        saveProfile($http, $scope.token, $scope.profile);
     };
 
     $scope.onSaveBlock = function(block) {

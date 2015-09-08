@@ -30,6 +30,20 @@ class Files {
         this.root = root;
     }
 
+    public mkDir(dir: string): q.Promise<boolean> {
+        var deferred: q.Deferred<boolean> = q.defer<boolean>();
+        fs.mkdir(this.root + dir, function(e) {
+            if (!e) {
+                deferred.resolve(true);
+            } else if (e.code === 'EEXIST') {
+                deferred.resolve(false);
+            } else {
+                deferred.reject(e);
+            }
+        });
+        return deferred.promise;
+    }
+
     public read(relativePath: string): q.Promise<string> {
         var deferred: q.Deferred<string> = q.defer<string>();
         fs.readFile(this.root + relativePath, {encoding: "utf8"}, function(err, data) {

@@ -29,7 +29,21 @@ class Profiles {
     private files: Files;
 
     constructor(files: Files) {
-        this.files = files;
+        var self = this;
+        self.files = files;
+        self.files.mkDir("profiles").then(function(isCreated: boolean) {
+            if (isCreated) {
+                console.log("'profiles' folder has been created. Now initializing sandbox...")
+                var profile: Profile = Profiles.generateSandbox();
+                self.files.write(Profiles.path(profile.username), JSON.stringify(Profiles.copyProfile(profile))).then(function() {
+                    console.log("sandbox successfully initialized.")
+                }).fail(function(err) {
+                    console.error(err);
+                }).done();
+            }
+        }).fail(function(err) {
+            console.error(err);
+        }).done();
     }
 
     private static path(username: string): string {
@@ -54,7 +68,7 @@ class Profiles {
                     var profile: Profile = Profiles.generateEmptyProfile(username, hash);
                     self.files.write(Profiles.path(profile.username), JSON.stringify(Profiles.copyProfile(profile))).then(function() {
                         deferred.resolve(true);
-                    })
+                    });
                 }).fail(function(err) {
                     deferred.reject(err);
                 }).done();
@@ -101,6 +115,29 @@ class Profiles {
                     posy: 0
                 },
                 blocks: []
+            }
+        }
+    }
+
+    static generateSandbox(): Profile {
+        return {
+            username: "sandbox",
+            password: "",
+            page: {
+                mainBlock: {
+                    posx: 0,
+                    posy: 0
+                },
+                blocks: [{
+                    posx: 1,
+                    posy: 0,
+                    title: "Best sites",
+                    links: [{
+                        title: "Linkage",
+                        url: "http://linkage.qaraywa.net/",
+                        description: "An awesome site"
+                    }]
+                }]
             }
         }
     }
