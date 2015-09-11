@@ -85,9 +85,9 @@ function initEditListeners($scope, $location, $http) {
         var block = {
             links: [],
             posx: x,
-            posy: y
+            posy: y,
+            type: "links"
         };
-        $scope.profile.page.blocks.push(block);
         $scope.blocks.push(block);
         fillPageStyle($scope.blocks);
         saveProfile($http, $scope.token, $scope.profile);
@@ -104,10 +104,9 @@ function initEditListeners($scope, $location, $http) {
     };
 
     $scope.onDeleteBlock = function(block) {
-        var index = $scope.profile.page.blocks.indexOf(block);
+        var index = $scope.blocks.indexOf(block);
         if (index >= 0) {
-            $scope.profile.page.blocks.splice(index, 1);
-            $scope.blocks.splice(index+1, 1);
+            $scope.blocks.splice(index, 1);
             fillPageStyle($scope.blocks);
             saveProfile($http, $scope.token, $scope.profile);
         }
