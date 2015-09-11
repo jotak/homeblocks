@@ -3,36 +3,6 @@
     <!-- Loop over blocks -->
     <div class="block" style="{{ block.style }}" ng-repeat="block in blocks">
         <div class="block-title" ng-if="block.title">{{ block.title }}</div>
-        <span ng-if="block.id == 0">
-            <a ng-click="onClickNew()" ng-mouseover="profile.message='Create a new profile'"><i class="fa fa-file-o"></i></a>&nbsp;
-            <a ng-click="onClickEdit()" ng-mouseover="profile.message='Switch to edit mode'"><i class="fa fa-pencil-square-o"></i></a>&nbsp;
-            <a ng-click="onClickDuplicate()" ng-mouseover="profile.message='Duplicate this profile'"><i class="fa fa-files-o"></i></a>&nbsp;
-            <a ng-click="showUpload = !showUpload" ng-mouseover="profile.message='Upload profile from json'"><i class="fa fa-cloud-upload"></i></a>
-            <div ng-class="{'hidden': !showNew }">
-                <input id='newName' type='text' placeholder='Name' ng-model='newName' my-enter="onNew(newName, newPwd);"><br/>
-                <input type='password' placeholder='Password' ng-model='newPwd' my-enter="onNew(newName, newPwd);"><br/>
-                <input type='button' value='Ok' ng-click="onNew(newName, newPwd);">
-            </div>
-            <div ng-class="{'hidden': !showEdit }">
-                <input id='editPwd' type='password' placeholder='Password' ng-model='pwd' my-enter="editMode(pwd);"><br/>
-                <input type='button' value='Ok' ng-click="editMode(pwd);">
-            </div>
-            <div ng-class="{'hidden': !showDuplicate }">
-                <input id='dupName' type='text' placeholder='Name' ng-model='dupName'><br/>
-                <input type='password' placeholder='Password' ng-model='dupPwd' my-enter="onDuplicate(dupName, dupPwd);"><br/>
-                <input type='button' value='Ok' ng-click="onDuplicate(dupName, dupPwd);">
-            </div>
-            <div ng-class="{'hidden': !showUpload }">
-                <textarea ng-model='uploadProfile'></textarea><br/>
-                <input type='button' value='Ok' ng-click="onUpload(uploadProfile);">
-            </div>
-            <br/><br/>
-            <div ng-bind-html="profile.message || 'Welcome ' + username + '!'"></div>
-        </span>
-        <ul ng-if="block.id != 0">
-            <li ng-repeat="link in block.links">
-                <a href="{{ link.url }}" ng-mouseover="profile.message=link.description">{{ link.title }}</a>
-            </li>
-        </ul>
+        <ng-include src="'partials/block-'+ block.type + '.html'"></ng-include>
     </div>
 </div>

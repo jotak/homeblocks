@@ -22,10 +22,14 @@ SOFTWARE.
 
 interface Block {
     posx: number,
-    posy: number
+    posy: number,
+    title?: string,
+    type: string
 }
 
-interface CustomBlock extends Block {
-    title?: string,
+interface MainBlock extends Block {
+}
+
+interface LinksBlock extends Block {
     links: Link[]
 }

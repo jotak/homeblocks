@@ -20,7 +20,6 @@ SOFTWARE.
 "use strict";
 
 angular.module('linkage.editview', ['ngRoute'])
-
 .config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/e/:username/:token', {
         templateUrl: 'editview.html',
@@ -34,7 +33,7 @@ angular.module('linkage.editview', ['ngRoute'])
             $scope.profile = profile;
             $scope.username = $routeParams.username;
             $scope.token = $routeParams.token;
-            $scope.blocks = [profile.page.mainBlock].concat(profile.page.blocks);
+            $scope.blocks = profile.page.blocks;
             fillPageStyle($scope.blocks);
             initEditListeners($scope, $location, $http);
         })

@@ -26,10 +26,12 @@
     ],
     "files": [
         "./block.ts",
+        "./blocks.ts",
         "./files.ts",
         "./link.ts",
         "./main.ts",
         "./main_openshift.ts",
+        "./migrate.ts",
         "./page.ts",
         "./profile.ts",
         "./profiles.ts",

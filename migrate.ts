@@ -17,9 +17,23 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+import q = require("q");
+import Files = require('./files');
+import Profile = require('./profile');
 
 "use strict";
 
-interface Page {
-    blocks: Block[]
+export function migrateProfile(data: any): Profile {
+    console.log("Checking for migration");
+    if (data.hasOwnProperty('page') && data.page.hasOwnProperty('mainBlock')) {
+        console.log("Start migration");
+        var blocks: any[] = data.page.blocks;
+        blocks.forEach(function(block) {
+            block.type = "links";
+        });
+        data.page.mainBlock.type = "main";
+        data.page.blocks = [data.page.mainBlock].concat(data.page.blocks);
+        return data;
+    }
+    return null;
 }

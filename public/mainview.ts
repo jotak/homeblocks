@@ -33,7 +33,7 @@ angular.module('linkage.mainview', ['ngRoute'])
         .success(function(profile) {
             $scope.profile = profile;
             $scope.username = $routeParams.username;
-            $scope.blocks = [profile.page.mainBlock].concat(profile.page.blocks);
+            $scope.blocks = profile.page.blocks;
             fillPageStyle($scope.blocks);
             initMainListeners($scope, $location, $http);
         })

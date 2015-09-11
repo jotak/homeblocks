@@ -20,6 +20,44 @@ SOFTWARE.
 
 "use strict";
 
-interface Page {
-    blocks: Block[]
+class Blocks {
+
+    static main(posx: number, posy: number): MainBlock {
+        return {
+            posx: posx,
+            posy: posy,
+            type: "main"
+        }
+    }
+
+    static links(posx: number, posy: number, title: string, links: Link[]): LinksBlock {
+        return {
+            posx: posx,
+            posy: posy,
+            title: title,
+            type: "links",
+            links: links
+        }
+    }
+
+    static clone(block: Block) {
+        if (block.type == "main") {
+            return Blocks.main(block.posx, block.posy);
+        } else if (block.type == "links") {
+            var linksBlock: LinksBlock = <LinksBlock>block;
+            return Blocks.links(block.posx, block.posy, block.title, linksBlock.links.map(function(link) {
+                return Blocks.copyLink(link)
+            }));
+        }
+    }
+
+    private static copyLink(link: Link): Link {
+        // Eliminate any unnecessary field
+        return {
+            title: link.title,
+            url: link.url,
+            description: link.description
+        };
+    }
 }
+export = Blocks

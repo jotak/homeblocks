@@ -21,6 +21,8 @@ import q = require("q");
 import crypto = require('crypto');
 import Files = require('./files');
 import Profile = require('./profile');
+import Blocks = require('./blocks');
+import mig = require('./migrate');
 
 "use strict";
 
@@ -51,9 +53,18 @@ class Profiles {
     }
 
     public load(username: string): q.Promise<Profile> {
-        return this.files.read(Profiles.path(username)).then(function(content: string) {
-            var profile: Profile = eval('(' + content + ')');
-            return profile;
+        var self = this;
+        return self.files.read(Profiles.path(username)).then(function(content: string) {
+            var json: any = eval('(' + content + ')');
+            var profile: Profile = mig.migrateProfile(json);
+            if (profile != null) {
+                // Save it
+                console.log("Profile migration for " + username + ". Saving migrated profile.");
+                profile = Profiles.copyProfile(profile);
+                self.files.write(Profiles.path(profile.username), JSON.stringify(profile));
+                return profile;
+            }
+            return json;
         });
     }
 
@@ -110,22 +121,14 @@ class Profiles {
             username: username,
             password: password,
             page: {
-                mainBlock: {
-                    posx: 0,
-                    posy: 0
-                },
-                blocks: []
+                blocks: [Blocks.main(0, 0)]
             }
         }
     }
 
     static generateSandbox(): Profile {
         var sandbox: Profile = Profiles.generateEmptyProfile("sandbox", "");
-        sandbox.page.blocks.push({
-            posx: 1,
-            posy: 0,
-            title: "Awesome sites",
-            links: [{
+        sandbox.page.blocks.push(Blocks.links(1, 0, "Awesome sites", [{
                 title: "Linkage",
                 url: "http://nodejs-lnkg.rhcloud.com/#v/sandbox",
                 description: "Linkage sandbox on OpenShift! Feel free to edit (no password)"
@@ -137,8 +140,7 @@ class Profiles {
                 title: "Linkage@GitHub",
                 url: "https://github.com/jotak/linkage",
                 description: "Check me out on github!"
-            }]
-        });
+            }]));
         return sandbox;
     }
 
@@ -154,39 +156,9 @@ class Profiles {
     private static copyPage(page: Page): Page {
         // Eliminate any unnecessary field
         return {
-            mainBlock: Profiles.copyBlock(page.mainBlock),
-            blocks: page.blocks.map(function(block: CustomBlock) {
-                return Profiles.copyCustomBlock(block);
+            blocks: page.blocks.map(function(block: Block) {
+                return Blocks.clone(block);
             })
-        };
-    }
-
-    private static copyBlock(block: Block): Block {
-        // Eliminate any unnecessary field
-        return {
-            posx: block.posx,
-            posy: block.posy
-        };
-    }
-
-    private static copyCustomBlock(block: CustomBlock): CustomBlock {
-        // Eliminate any unnecessary field
-        return {
-            posx: block.posx,
-            posy: block.posy,
-            title: block.title,
-            links: block.links.map(function(link: Link) {
-                return Profiles.copyLink(link);
-            })
-        };
-    }
-
-    private static copyLink(link: Link): Link {
-        // Eliminate any unnecessary field
-        return {
-            title: link.title,
-            url: link.url,
-            description: link.description
         };
     }
 
