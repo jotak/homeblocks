@@ -28,7 +28,14 @@ angular.module('linkage', [
 ])
 .config(['$routeProvider', function($routeProvider) {
     $routeProvider.otherwise({redirectTo: '/v/sandbox'});
-}]);
+}])
+.directive('menu', function() {
+    return {
+        restrict: 'E',
+        scope: false/*TODO: restrict scope*/,
+        templateUrl: 'partials/menu.html'
+    };
+});
 
 function computePositions(blocks) {
     var map = {};
