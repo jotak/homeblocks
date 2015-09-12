@@ -2,14 +2,15 @@
     <li ng-repeat="link in block.links">
         <div ng-class="{'hidden': link.editing }">
             <a ng-if="$index > 0" ng-click="onLinkUp(block, $index);"><i class="fa fa-arrow-circle-o-up"></i></a>
-            <a ng-click="link.editing = true;">{{ link.title }}</a>
+            <a ng-click='onClickLink(link, "linkTitle_" + block.id + "_" + $index);'>{{ link.title }}</a>
             <a ng-click="onDeleteLink(block, $index);"><i class="fa fa-trash"></i></a>
         </div>
         <div ng-class="{'hidden': !link.editing }">
-            <input type='text' placeholder='Title' ng-model='link.title'><br/>
-            <input type='text' placeholder='URL' ng-model='link.url'>
-            <input type='text' placeholder='Description' ng-model='link.description'>
+            <input type='text' id='{{ "linkTitle_" + block.id + "_" + $index }}' placeholder='Title' ng-model='link.title' my-enter="onSaveLink(link);"><br/>
+            <input type='text' placeholder='URL' ng-model='link.url' my-enter="onSaveLink(link);">
+            <input type='text' placeholder='Description' ng-model='link.description' my-enter="onSaveLink(link);">
             <input type='button' value='Ok' ng-click="onSaveLink(link);">
         </div>
     </li>
 </ul>
+<a ng-click="onCreateLink(block);"><i class="fa fa-plus-circle"></i></a>

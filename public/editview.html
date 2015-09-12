@@ -3,16 +3,15 @@
     <!-- Loop over blocks -->
     <div class="block" style="{{ block.style }}" ng-repeat="block in blocks">
         <div ng-class="{'hidden': block.editTitle }">
-            <div ng-if="block.type != 'main'" class="block-title" ng-click="block.editTitle = true;">
+            <div ng-if="block.type != 'main'" class="block-title" ng-click='onClickBlockTitle(block, "blockTitle_" + block.id);'>
                 {{ block.title || "(no title)" }}
             </div>
         </div>
         <div ng-class="{'hidden': !block.editTitle }">
-            <input type='text' placeholder='Title' ng-model='block.title'>
+            <input id='{{ "blockTitle_" + block.id }}' type='text' placeholder='Title' ng-model='block.title' my-enter="onSaveBlock(block);">
             <input type='button' value='Ok' ng-click="onSaveBlock(block);">
         </div>
         <ng-include src="'partials/block-'+ block.type + '-edit.html'"></ng-include>
-        <a ng-if="block.type != 'main'" ng-click="onCreateLink(block);"><i class="fa fa-plus-circle"></i></a>
         <a ng-if="block.type != 'main'" ng-click="onDeleteBlock(block);" class="del-block"><i class="fa fa-trash"></i></a>
         <a ng-if="block.N" ng-click="onSwapBlocks(block, block.posx, block.posy-1);" class="btn-north"><i class="fa fa-refresh"></i></a>
         <a ng-if="!block.N" ng-click="onCreateBlock(block.posx, block.posy-1);" class="btn-north"><i class="fa fa-plus-square"></i></a>

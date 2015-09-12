@@ -22,7 +22,6 @@ import Profile = require('./profile');
 "use strict";
 
 export function migrateProfile(data: any): Profile {
-    console.log("Checking for migration");
     if (data.hasOwnProperty('page') && data.page.hasOwnProperty('mainBlock')) {
         console.log("Start migration");
         var blocks: any[] = data.page.blocks;

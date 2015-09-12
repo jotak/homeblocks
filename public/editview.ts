@@ -48,6 +48,20 @@ function initEditListeners($scope, $location, $http) {
         $location.path("/v/" + $scope.username);
     };
 
+    $scope.onClickBlockTitle = function(block, focusId) {
+        block.editTitle = true;
+        setTimeout(function() {
+            document.getElementById(focusId).focus();
+        }, 30);
+    };
+
+    $scope.onClickLink = function(link, focusId) {
+        link.editing = true;
+        setTimeout(function() {
+            document.getElementById(focusId).focus();
+        }, 30);
+    };
+
     $scope.onSaveLink = function(link) {
         link.editing = false;
         saveProfile($http, $scope.token, $scope.profile);
@@ -56,12 +70,15 @@ function initEditListeners($scope, $location, $http) {
     $scope.onCreateLink = function(block) {
         var link = {
             title: "",
-            url: "",
+            url: "http://",
             description: "",
             editing: true
         };
         block.links.push(link);
         saveProfile($http, $scope.token, $scope.profile);
+        setTimeout(function() {
+            document.getElementById('linkTitle').focus();
+        }, 30);
     };
 
     $scope.onDeleteLink = function(block, index) {

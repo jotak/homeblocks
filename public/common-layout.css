@@ -61,6 +61,7 @@ body {
 
 .block input {
     z-index: 2;
+    position: relative;
 }
 
 .hidden {
