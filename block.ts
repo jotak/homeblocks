@@ -33,3 +33,11 @@ interface MainBlock extends Block {
 interface LinksBlock extends Block {
     links: Link[]
 }
+
+interface AudioBlock extends Block {
+    audioLinks: Link[]
+}
+
+interface VideoBlock extends Block {
+    videoLinks: Link[]
+}

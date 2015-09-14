@@ -52,6 +52,24 @@ angular.module('linkage.mainview', ['ngRoute'])
             }
         });
     }
+}).directive('trustedUrl', function($sce) {
+    return {
+        restrict: 'A',
+        scope: {
+            src:'='
+        },
+        replace: true,
+        template: function(element, attrs, scope) {
+            return '<' + attrs.type + ' ng-src="{{ url }}" controls></' + attrs.type + '>';
+        },
+        link: function(scope: any) {
+            scope.$watch('src', function(newVal, oldVal) {
+               if (newVal !== undefined) {
+                   scope.url = $sce.trustAsResourceUrl(newVal);
+               }
+            });
+        }
+    }
 });
 
 function initMainListeners($scope, $location, $http) {

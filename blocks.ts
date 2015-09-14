@@ -40,12 +40,42 @@ class Blocks {
         }
     }
 
+    static audio(posx: number, posy: number, title: string, audioLinks: Link[]): AudioBlock {
+        return {
+            posx: posx,
+            posy: posy,
+            title: title,
+            type: "audio",
+            audioLinks: audioLinks
+        }
+    }
+
+    static video(posx: number, posy: number, title: string, videoLinks: Link[]): VideoBlock {
+        return {
+            posx: posx,
+            posy: posy,
+            title: title,
+            type: "video",
+            videoLinks: videoLinks
+        }
+    }
+
     static clone(block: Block) {
         if (block.type == "main") {
             return Blocks.main(block.posx, block.posy);
         } else if (block.type == "links") {
             var linksBlock: LinksBlock = <LinksBlock>block;
             return Blocks.links(block.posx, block.posy, block.title, linksBlock.links.map(function(link) {
+                return Blocks.copyLink(link)
+            }));
+        } else if (block.type == "audio") {
+            var audioBlock: AudioBlock = <AudioBlock>block;
+            return Blocks.audio(block.posx, block.posy, block.title, audioBlock.audioLinks.map(function(link) {
+                return Blocks.copyLink(link)
+            }));
+        } else if (block.type == "video") {
+            var videoBlock: VideoBlock = <VideoBlock>block;
+            return Blocks.video(block.posx, block.posy, block.title, videoBlock.videoLinks.map(function(link) {
                 return Blocks.copyLink(link)
             }));
         }

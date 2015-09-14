@@ -76,9 +76,6 @@ function initEditListeners($scope, $location, $http) {
         };
         block.links.push(link);
         saveProfile($http, $scope.token, $scope.profile);
-        setTimeout(function() {
-            document.getElementById('linkTitle').focus();
-        }, 30);
     };
 
     $scope.onDeleteLink = function(block, index) {
@@ -90,6 +87,52 @@ function initEditListeners($scope, $location, $http) {
         var tmp = block.links[index-1];
         block.links[index-1] = block.links[index];
         block.links[index] = tmp;
+        saveProfile($http, $scope.token, $scope.profile);
+    };
+
+    $scope.onCreateAudioLink = function(block) {
+        var link = {
+            title: "",
+            url: "http://",
+            description: "",
+            editing: true
+        };
+        block.audioLinks.push(link);
+        saveProfile($http, $scope.token, $scope.profile);
+    };
+
+    $scope.onDeleteAudioLink = function(block, index) {
+        block.audioLinks.splice(index, 1);
+        saveProfile($http, $scope.token, $scope.profile);
+    };
+
+    $scope.onAudioLinkUp = function(block, index) {
+        var tmp = block.audioLinks[index-1];
+        block.audioLinks[index-1] = block.audioLinks[index];
+        block.audioLinks[index] = tmp;
+        saveProfile($http, $scope.token, $scope.profile);
+    };
+
+    $scope.onCreateVideoLink = function(block) {
+        var link = {
+            title: "",
+            url: "http://",
+            description: "",
+            editing: true
+        };
+        block.videoLinks.push(link);
+        saveProfile($http, $scope.token, $scope.profile);
+    };
+
+    $scope.onDeleteVideoLink = function(block, index) {
+        block.videoLinks.splice(index, 1);
+        saveProfile($http, $scope.token, $scope.profile);
+    };
+
+    $scope.onVideoLinkUp = function(block, index) {
+        var tmp = block.videoLinks[index-1];
+        block.videoLinks[index-1] = block.videoLinks[index];
+        block.videoLinks[index] = tmp;
         saveProfile($http, $scope.token, $scope.profile);
     };
 
@@ -135,6 +178,10 @@ function createEmptyBlock(x, y, type) {
     };
     if (type == "links") {
         block.links = [];
+    } else if (type == "audio") {
+        block.audioLinks = [];
+    } else if (type == "video") {
+        block.videoLinks = [];
     } else {
         console.log("Type " + type + " not implemented (yet?)");
         return null;

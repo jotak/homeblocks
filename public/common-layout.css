@@ -133,3 +133,13 @@ ul.btn-west {
     margin-left: -50px;
     margin-top: -50px;
 }
+
+.block audio {
+    margin-top: 50px;
+    width: 200px;
+}
+
+.block video {
+    margin-top: 5px;
+    width: 200px;
+}

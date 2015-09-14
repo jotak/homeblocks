@@ -1,0 +1,16 @@
+<ul>
+    <li ng-repeat="link in block.videoLinks">
+        <div ng-show="!link.editing">
+            <a ng-if="$index > 0" ng-click="onVideoLinkUp(block, $index);" ng-mouseover="profile.message='Move up'"><i class="fa fa-arrow-circle-o-up"></i></a>
+            <a ng-click='onClickLink(link, "linkTitle_" + block.id + "_" + $index);' ng-mouseover="profile.message='Edit source'">{{ link.title }}</a>
+            <a ng-click="onDeleteVideoLink(block, $index);" ng-mouseover="profile.message='Delete source'"><i class="fa fa-trash"></i></a>
+        </div>
+        <div ng-show="link.editing">
+            <input type='text' id='{{ "linkTitle_" + block.id + "_" + $index }}' placeholder='Title' ng-model='link.title' my-enter="onSaveLink(link);"><br/>
+            <input type='text' placeholder='Video source' ng-model='link.url' my-enter="onSaveLink(link);">
+            <input type='button' value='Ok' ng-click="onSaveLink(link);">
+        </div>
+    </li>
+</ul>
+<a ng-click="onCreateVideoLink(block);" ng-mouseover="profile.message='Add video source'"><i class="fa fa-plus-circle"></i></a>
+<a ng-click="onDeleteBlock(block);" ng-mouseover="profile.message='Remove this block'" class="del-block"><i class="fa fa-trash"></i></a>
