@@ -98,16 +98,13 @@ function initEditListeners($scope, $location, $http) {
         saveProfile($http, $scope.token, $scope.profile);
     };
 
-    $scope.onCreateBlock = function(x, y) {
-        var block = {
-            links: [],
-            posx: x,
-            posy: y,
-            type: "links"
-        };
-        $scope.blocks.push(block);
-        fillPageStyle($scope.blocks);
-        saveProfile($http, $scope.token, $scope.profile);
+    $scope.onCreateBlock = function(x, y, type) {
+        var block = createEmptyBlock(x, y, type);
+        if (block != null) {
+            $scope.blocks.push(block);
+            fillPageStyle($scope.blocks);
+            saveProfile($http, $scope.token, $scope.profile);
+        }
     };
 
     $scope.onSwapBlocks = function(b1, b2x, b2y) {
@@ -128,4 +125,19 @@ function initEditListeners($scope, $location, $http) {
             saveProfile($http, $scope.token, $scope.profile);
         }
     };
+}
+
+function createEmptyBlock(x, y, type) {
+    var block: any = {
+        posx: x,
+        posy: y,
+        type: type
+    };
+    if (type == "links") {
+        block.links = [];
+    } else {
+        console.log("Type " + type + " not implemented (yet?)");
+        return null;
+    }
+    return block;
 }

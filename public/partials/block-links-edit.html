@@ -1,9 +1,9 @@
 <ul>
     <li ng-repeat="link in block.links">
         <div ng-class="{'hidden': link.editing }">
-            <a ng-if="$index > 0" ng-click="onLinkUp(block, $index);"><i class="fa fa-arrow-circle-o-up"></i></a>
-            <a ng-click='onClickLink(link, "linkTitle_" + block.id + "_" + $index);'>{{ link.title }}</a>
-            <a ng-click="onDeleteLink(block, $index);"><i class="fa fa-trash"></i></a>
+            <a ng-if="$index > 0" ng-click="onLinkUp(block, $index);" ng-mouseover="profile.message='Move up'"><i class="fa fa-arrow-circle-o-up"></i></a>
+            <a ng-click='onClickLink(link, "linkTitle_" + block.id + "_" + $index);' ng-mouseover="profile.message='Edit link'">{{ link.title }}</a>
+            <a ng-click="onDeleteLink(block, $index);" ng-mouseover="profile.message='Delete link'"><i class="fa fa-trash"></i></a>
         </div>
         <div ng-class="{'hidden': !link.editing }">
             <input type='text' id='{{ "linkTitle_" + block.id + "_" + $index }}' placeholder='Title' ng-model='link.title' my-enter="onSaveLink(link);"><br/>
@@ -13,4 +13,5 @@
         </div>
     </li>
 </ul>
-<a ng-click="onCreateLink(block);"><i class="fa fa-plus-circle"></i></a>
+<a ng-click="onCreateLink(block);" ng-mouseover="profile.message='Add a link'"><i class="fa fa-plus-circle"></i></a>
+<a ng-click="onDeleteBlock(block);" ng-mouseover="profile.message='Remove this block'" class="del-block"><i class="fa fa-trash"></i></a>

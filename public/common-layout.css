@@ -105,3 +105,31 @@ body {
     top: 100px;
     left: 0;
 }
+
+ul.btn-north {
+    margin-left: -50px;
+    margin-top: -50px;
+}
+
+ul.btn-south {
+    margin-left: -50px;
+    margin-top: 20px;
+}
+
+ul.btn-north li {
+    display: inline;
+}
+
+ul.btn-south li {
+    display: inline;
+}
+
+ul.btn-east {
+    margin-left: 20px;
+    margin-top: -50px;
+}
+
+ul.btn-west {
+    margin-left: -50px;
+    margin-top: -50px;
+}

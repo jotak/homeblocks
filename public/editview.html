@@ -12,12 +12,6 @@
             <input type='button' value='Ok' ng-click="onSaveBlock(block);">
         </div>
         <ng-include src="'partials/block-'+ block.type + '-edit.html'"></ng-include>
-        <a ng-if="block.type != 'main'" ng-click="onDeleteBlock(block);" class="del-block"><i class="fa fa-trash"></i></a>
-        <a ng-if="block.N" ng-click="onSwapBlocks(block, block.posx, block.posy-1);" class="btn-north"><i class="fa fa-refresh"></i></a>
-        <a ng-if="!block.N" ng-click="onCreateBlock(block.posx, block.posy-1);" class="btn-north"><i class="fa fa-plus-square"></i></a>
-        <a ng-if="!block.S" ng-click="onCreateBlock(block.posx, block.posy+1);" class="btn-south"><i class="fa fa-plus-square"></i></a>
-        <a ng-if="block.E" ng-click="onSwapBlocks(block, block.posx+1, block.posy);" class="btn-east"><i class="fa fa-refresh"></i></a>
-        <a ng-if="!block.E" ng-click="onCreateBlock(block.posx+1, block.posy);" class="btn-east"><i class="fa fa-plus-square"></i></a>
-        <a ng-if="!block.W" ng-click="onCreateBlock(block.posx-1, block.posy);" class="btn-west"><i class="fa fa-plus-square"></i></a>
+        <ng-include src="'partials/blocks-neighbours.html'"></ng-include>
     </div>
 </div>
