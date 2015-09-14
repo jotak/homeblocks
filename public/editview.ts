@@ -90,52 +90,6 @@ function initEditListeners($scope, $location, $http) {
         saveProfile($http, $scope.token, $scope.profile);
     };
 
-    $scope.onCreateAudioLink = function(block) {
-        var link = {
-            title: "",
-            url: "http://",
-            description: "",
-            editing: true
-        };
-        block.audioLinks.push(link);
-        saveProfile($http, $scope.token, $scope.profile);
-    };
-
-    $scope.onDeleteAudioLink = function(block, index) {
-        block.audioLinks.splice(index, 1);
-        saveProfile($http, $scope.token, $scope.profile);
-    };
-
-    $scope.onAudioLinkUp = function(block, index) {
-        var tmp = block.audioLinks[index-1];
-        block.audioLinks[index-1] = block.audioLinks[index];
-        block.audioLinks[index] = tmp;
-        saveProfile($http, $scope.token, $scope.profile);
-    };
-
-    $scope.onCreateVideoLink = function(block) {
-        var link = {
-            title: "",
-            url: "http://",
-            description: "",
-            editing: true
-        };
-        block.videoLinks.push(link);
-        saveProfile($http, $scope.token, $scope.profile);
-    };
-
-    $scope.onDeleteVideoLink = function(block, index) {
-        block.videoLinks.splice(index, 1);
-        saveProfile($http, $scope.token, $scope.profile);
-    };
-
-    $scope.onVideoLinkUp = function(block, index) {
-        var tmp = block.videoLinks[index-1];
-        block.videoLinks[index-1] = block.videoLinks[index];
-        block.videoLinks[index] = tmp;
-        saveProfile($http, $scope.token, $scope.profile);
-    };
-
     $scope.onSaveBlock = function(block) {
         block.editTitle = false;
         saveProfile($http, $scope.token, $scope.profile);
@@ -148,6 +102,15 @@ function initEditListeners($scope, $location, $http) {
             fillPageStyle($scope.blocks);
             saveProfile($http, $scope.token, $scope.profile);
         }
+    };
+
+    $scope.onCreateCopyBlock = function(x, y) {
+        $scope.blocks.push({
+            posx: x,
+            posy: y,
+            type: "copy"
+        });
+        fillPageStyle($scope.blocks);
     };
 
     $scope.onSwapBlocks = function(b1, b2x, b2y) {
@@ -168,6 +131,31 @@ function initEditListeners($scope, $location, $http) {
             saveProfile($http, $scope.token, $scope.profile);
         }
     };
+
+    $scope.onSearchBlocks = function(block) {
+        $http.get('/api/profile/' + block.fromProfile + "/blocknames")
+            .success(function(blockNames) {
+                block.fromBlocks = blockNames;
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
+    };
+
+    $scope.onCopyBlock = function(block) {
+        $http.get('/api/profile/' + block.fromProfile + "/block/" + block.selected)
+            .success(function(fromBlock) {
+                fromBlock.posx = block.posx;
+                fromBlock.posy = block.posy;
+                var index = $scope.blocks.indexOf(block);
+                $scope.blocks[index] = fromBlock;
+                fillPageStyle($scope.blocks);
+                saveProfile($http, $scope.token, $scope.profile);
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
+    };
 }
 
 function createEmptyBlock(x, y, type) {
@@ -176,12 +164,8 @@ function createEmptyBlock(x, y, type) {
         posy: y,
         type: type
     };
-    if (type == "links") {
+    if (type == "links" || type == "audio" || type == "video") {
         block.links = [];
-    } else if (type == "audio") {
-        block.audioLinks = [];
-    } else if (type == "video") {
-        block.videoLinks = [];
     } else {
         console.log("Type " + type + " not implemented (yet?)");
         return null;

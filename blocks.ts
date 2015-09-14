@@ -40,23 +40,23 @@ class Blocks {
         }
     }
 
-    static audio(posx: number, posy: number, title: string, audioLinks: Link[]): AudioBlock {
+    static audio(posx: number, posy: number, title: string, links: Link[]): AudioBlock {
         return {
             posx: posx,
             posy: posy,
             title: title,
             type: "audio",
-            audioLinks: audioLinks
+            links: links
         }
     }
 
-    static video(posx: number, posy: number, title: string, videoLinks: Link[]): VideoBlock {
+    static video(posx: number, posy: number, title: string, links: Link[]): VideoBlock {
         return {
             posx: posx,
             posy: posy,
             title: title,
             type: "video",
-            videoLinks: videoLinks
+            links: links
         }
     }
 
@@ -70,12 +70,12 @@ class Blocks {
             }));
         } else if (block.type == "audio") {
             var audioBlock: AudioBlock = <AudioBlock>block;
-            return Blocks.audio(block.posx, block.posy, block.title, audioBlock.audioLinks.map(function(link) {
+            return Blocks.audio(block.posx, block.posy, block.title, audioBlock.links.map(function(link) {
                 return Blocks.copyLink(link)
             }));
         } else if (block.type == "video") {
             var videoBlock: VideoBlock = <VideoBlock>block;
-            return Blocks.video(block.posx, block.posy, block.title, videoBlock.videoLinks.map(function(link) {
+            return Blocks.video(block.posx, block.posy, block.title, videoBlock.links.map(function(link) {
                 return Blocks.copyLink(link)
             }));
         }

@@ -35,9 +35,9 @@ interface LinksBlock extends Block {
 }
 
 interface AudioBlock extends Block {
-    audioLinks: Link[]
+    links: Link[]
 }
 
 interface VideoBlock extends Block {
-    videoLinks: Link[]
+    links: Link[]
 }

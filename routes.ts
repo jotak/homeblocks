@@ -37,13 +37,41 @@ export function register(app: express.Application, profiles: Profiles) {
         }).done();
     });
 
+    // GET PROFILE
     app.get("/api/profile/:username", function(req, res) {
         profiles.load(req.params.username).then(function(profile: Profile) {
             profile.password = "";
             res.json(profile);
         }).fail(function(reason: Error) {
             console.log("Application error: " + reason.message);
-            res.json(Profiles.generateEmptyProfile(req.params.username, ""))
+            res.json(Profiles.generateEmptyProfile(req.params.username, ""));
+        }).done();
+    });
+
+    // GET PROFILE BLOCK NAMES
+    app.get("/api/profile/:username/blocknames", function(req, res) {
+        profiles.load(req.params.username).then(function(profile: Profile) {
+            var names: string[] = profile.page.blocks.map(function(block: Block) {
+                return block.title != undefined ? block.title : "?";
+            });
+            res.json(names);
+        }).fail(function(reason: Error) {
+            console.log("Application error: " + reason.message);
+            res.json([]);
+        }).done();
+    });
+
+    // GET PROFILE BLOCK
+    app.get("/api/profile/:username/block/:idx", function(req, res) {
+        profiles.load(req.params.username).then(function(profile: Profile) {
+            if (profile.page.blocks.length > req.params.idx) {
+                res.json(profile.page.blocks[req.params.idx]);
+            } else {
+                res.json(null);
+            }
+        }).fail(function(reason: Error) {
+            console.log("Application error: " + reason.message);
+            res.json(null);
         }).done();
     });
 

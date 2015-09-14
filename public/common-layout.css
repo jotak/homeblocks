@@ -107,12 +107,12 @@ body {
 }
 
 ul.btn-north {
-    margin-left: -50px;
+    margin-left: -65px;
     margin-top: -50px;
 }
 
 ul.btn-south {
-    margin-left: -50px;
+    margin-left: -65px;
     margin-top: 20px;
 }
 
@@ -126,12 +126,12 @@ ul.btn-south li {
 
 ul.btn-east {
     margin-left: 20px;
-    margin-top: -50px;
+    margin-top: -72px;
 }
 
 ul.btn-west {
     margin-left: -50px;
-    margin-top: -50px;
+    margin-top: -72px;
 }
 
 .block audio {
