@@ -28,7 +28,7 @@ angular.module('homeblocks.mainview', ['ngRoute'])
     });
 }])
 .controller("mainViewCtrl", ['$scope','$http','$routeParams','$rootScope','$location', function($scope, $http, $routeParams, $rootScope, $location) {
-    $rootScope.title = "Homeblocks - " + $routeParams.username;
+    $rootScope.title = $routeParams.username + "@homeblocks";
     $http.get('/api/profile/' + $routeParams.username)
         .success(function(profile) {
             $scope.profile = profile;
