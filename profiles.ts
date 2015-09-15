@@ -1,6 +1,6 @@
 /*
 The MIT License (MIT)
-Copyright (c) 2015 Joel Takvorian, https://github.com/jotak/linkage
+Copyright (c) 2015 Joel Takvorian, https://github.com/jotak/homeblocks
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -129,16 +129,16 @@ class Profiles {
     static generateSandbox(): Profile {
         var sandbox: Profile = Profiles.generateEmptyProfile("sandbox", "");
         sandbox.page.blocks.push(Blocks.links(1, 0, "Awesome sites", [{
-                title: "Linkage",
+                title: "Homeblocks",
                 url: "http://nodejs-lnkg.rhcloud.com/#v/sandbox",
-                description: "Linkage sandbox on OpenShift! Feel free to edit (no password)"
+                description: "Homeblocks sandbox on OpenShift! Feel free to edit (no password)"
             },{
-                title: "Linkage/jotak",
+                title: "Homeblocks/jotak",
                 url: "http://nodejs-lnkg.rhcloud.com/#/v/jotak",
                 description: "My own page"
             },{
-                title: "Linkage@GitHub",
-                url: "https://github.com/jotak/linkage",
+                title: "Homeblocks@GitHub",
+                url: "https://github.com/jotak/homeblocks",
                 description: "Check me out on github!"
             }]));
         return sandbox;

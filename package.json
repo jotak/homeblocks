@@ -1,11 +1,11 @@
 {
-    "name"         : "linkage",
+    "name"         : "homeblocks",
     "version"      : "0.1.0",
     "description"  : "Links management",
     "author"       : "Joël Takvorian <joel.takvorian@qaraywa.net> (https://github.com/jotak)",
     "repository"   : {
         "type"       : "git",
-        "url"        : "https://github.com/jotak/linkage"
+        "url"        : "https://github.com/jotak/homeblocks"
     },
     "main"         : "main_openshift.js",
     "dependencies" : {

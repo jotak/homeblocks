@@ -13,7 +13,7 @@
         "noLib": false,
         "preserveConstEnums": true,
         "suppressImplicitAnyIndexErrors": true,
-        "outDir": "../linkage_js"
+        "outDir": "../homeblocks_js"
     },
     "filesGlob": [
         "./**/*.ts",

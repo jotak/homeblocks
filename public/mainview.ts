@@ -1,6 +1,6 @@
 /*
 The MIT License (MIT)
-Copyright (c) 2015 Joel Takvorian, https://github.com/jotak/linkage
+Copyright (c) 2015 Joel Takvorian, https://github.com/jotak/homeblocks
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -19,7 +19,7 @@ SOFTWARE.
 */
 "use strict";
 
-angular.module('linkage.mainview', ['ngRoute'])
+angular.module('homeblocks.mainview', ['ngRoute'])
 
 .config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/v/:username', {
@@ -28,7 +28,7 @@ angular.module('linkage.mainview', ['ngRoute'])
     });
 }])
 .controller("mainViewCtrl", ['$scope','$http','$routeParams','$rootScope','$location', function($scope, $http, $routeParams, $rootScope, $location) {
-    $rootScope.title = "Linkage - " + $routeParams.username;
+    $rootScope.title = "Homeblocks - " + $routeParams.username;
     $http.get('/api/profile/' + $routeParams.username)
         .success(function(profile) {
             $scope.profile = profile;

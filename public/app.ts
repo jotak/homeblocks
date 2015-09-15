@@ -20,11 +20,11 @@ SOFTWARE.
 "use strict";
 
 // Declare app level module which depends on views, and components
-angular.module('linkage', [
+angular.module('homeblocks', [
     'ngRoute',
     'ngSanitize',
-    'linkage.mainview',
-    'linkage.editview'
+    'homeblocks.mainview',
+    'homeblocks.editview'
 ])
 .config(['$routeProvider', function($routeProvider) {
     $routeProvider.otherwise({redirectTo: '/v/sandbox'});
