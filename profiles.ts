@@ -130,12 +130,12 @@ class Profiles {
         var sandbox: Profile = Profiles.generateEmptyProfile("sandbox", "");
         sandbox.page.blocks.push(Blocks.links(1, 0, "Awesome sites", [{
                 title: "Homeblocks",
-                url: "http://nodejs-lnkg.rhcloud.com/#v/sandbox",
-                description: "Homeblocks sandbox on OpenShift! Feel free to edit (no password)"
+                url: "http://www.homeblocks.net/#v/sandbox",
+                description: "Build your homepage, block after block! Feel free to edit the sandbox (no password), or create a new profile."
             },{
                 title: "Homeblocks/jotak",
-                url: "http://nodejs-lnkg.rhcloud.com/#/v/jotak",
-                description: "My own page"
+                url: "http://www.homeblocks.net/#/v/jotak",
+                description: "Example: @jotak's homepage"
             },{
                 title: "Homeblocks@GitHub",
                 url: "https://github.com/jotak/homeblocks",
