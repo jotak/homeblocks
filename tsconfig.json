@@ -36,6 +36,8 @@
         "./profile.ts",
         "./profiles.ts",
         "./public/app.ts",
+        "./public/block.ts",
+        "./public/dragndrop.ts",
         "./public/editview.ts",
         "./public/mainview.ts",
         "./routes.ts",
