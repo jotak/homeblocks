@@ -164,7 +164,7 @@ function createEmptyBlock(x, y, type) {
         posy: y,
         type: type
     };
-    if (type == "links" || type == "audio" || type == "video") {
+    if (type == "links" || type == "audio" || type == "video" || type == "spotify") {
         block.links = [];
     } else {
         console.log("Type " + type + " not implemented (yet?)");

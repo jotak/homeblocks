@@ -60,6 +60,16 @@ class Blocks {
         }
     }
 
+    static spotify(posx: number, posy: number, title: string, links: Link[]): SpotifyBlock {
+        return {
+            posx: posx,
+            posy: posy,
+            title: title,
+            type: "spotify",
+            links: links
+        }
+    }
+
     static clone(block: Block) {
         if (block.type == "main") {
             return Blocks.main(block.posx, block.posy);
@@ -76,6 +86,11 @@ class Blocks {
         } else if (block.type == "video") {
             var videoBlock: VideoBlock = <VideoBlock>block;
             return Blocks.video(block.posx, block.posy, block.title, videoBlock.links.map(function(link) {
+                return Blocks.copyLink(link)
+            }));
+        } else if (block.type == "spotify") {
+            var spotifyBlock: SpotifyBlock = <SpotifyBlock>block;
+            return Blocks.spotify(block.posx, block.posy, block.title, spotifyBlock.links.map(function(link) {
                 return Blocks.copyLink(link)
             }));
         }

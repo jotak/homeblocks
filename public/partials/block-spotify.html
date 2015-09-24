@@ -1,0 +1,5 @@
+<select ng-init="block.selected = block.links[0].url" ng-model="block.selected">
+    <option ng-repeat="link in block.links" value="{{ link.url }}">{{ link.title }}</option>
+</select>
+<!-- <iframe ng-src="{{ block.selected }}" width="200" height="200" frameborder="0" allowtransparency="true"></iframe> -->
+<div trusted-url type="spotify" src="block.selected"></div>

@@ -17,6 +17,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+import https = require('https');
 import express = require('express');
 import crypto = require('crypto');
 import Profile = require('./profile');
@@ -108,6 +109,18 @@ export function register(app: express.Application, profiles: Profiles) {
             console.log("Application error: " + reason.message);
             res.status(500).send(String(reason));
         }).done();
+    });
+
+    // SPOTIFY PROXY (for CORS)
+    app.get("/api/spotify/:trackId", function(req, res) {
+        console.log("Requesting spotify on https://embed.spotify.com/?uri=spotify:track:" + req.params.trackId);
+        https.request("https://embed.spotify.com/?uri=spotify:track:" + req.params.trackId, function(spotifyRes) {
+            console.log("Got result");
+            console.log(spotifyRes);
+            spotifyRes.on('data', function(data) {
+                res.send(data);
+            });
+        });
     });
 
     app.get("*", function(req, res) {

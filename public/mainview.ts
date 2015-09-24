@@ -60,12 +60,17 @@ angular.module('homeblocks.mainview', ['ngRoute'])
         },
         replace: true,
         template: function(element, attrs, scope) {
+            if (attrs.type === "spotify") {
+                return '<iframe ng-src="{{ proxyUrl }}" width="200" height="200" frameborder="0" allowtransparency="true"></iframe>';
+            }
             return '<' + attrs.type + ' ng-src="{{ url }}" controls></' + attrs.type + '>';
         },
         link: function(scope: any) {
             scope.$watch('src', function(newVal, oldVal) {
                if (newVal !== undefined) {
+                   console.log(newVal);
                    scope.url = $sce.trustAsResourceUrl(newVal);
+                   scope.proxyUrl = $sce.trustAsResourceUrl("/api/spotify/" + newVal);
                }
             });
         }

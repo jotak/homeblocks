@@ -41,3 +41,7 @@ interface AudioBlock extends Block {
 interface VideoBlock extends Block {
     links: Link[]
 }
+
+interface SpotifyBlock extends Block {
+    links: Link[]
+}
