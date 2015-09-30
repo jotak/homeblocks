@@ -1,7 +1,2 @@
-salt
-body-parser/
-express/
-generated_js/
-node/
-angularjs/
-profiles/
+tsd.json
+typings/

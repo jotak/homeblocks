@@ -19,6 +19,7 @@ SOFTWARE.
 */
 "use strict";
 
+/*
 angular.module('homeblocks.mainview', ['ngRoute'])
 
 .config(['$routeProvider', function($routeProvider) {
@@ -147,3 +148,4 @@ function initMainListeners($scope, $location, $http) {
         }, 30);
     };
 }
+*/

@@ -19,10 +19,7 @@
         "./**/*.ts",
         "./**/*.tsx",
         "!./node_modules/**/*",
-        "../DefinitelyTyped/express/express.d.ts",
-        "../DefinitelyTyped/body-parser/body-parser.d.ts",
-        "../DefinitelyTyped/angularjs/angular.d.ts",
-        "../DefinitelyTyped/q/Q.d.ts"
+        "./typings/react/react.d.ts"
     ],
     "files": [
         "./block.ts",
@@ -35,16 +32,23 @@
         "./page.ts",
         "./profile.ts",
         "./profiles.ts",
-        "./public/app.ts",
         "./public/block.ts",
+        "./public/blocks-processor.ts",
         "./public/dragndrop.ts",
-        "./public/editview.ts",
-        "./public/mainview.ts",
+        "./public/main.ts",
+        "./public/point.ts",
         "./routes.ts",
-        "../DefinitelyTyped/express/express.d.ts",
-        "../DefinitelyTyped/body-parser/body-parser.d.ts",
-        "../DefinitelyTyped/angularjs/angular.d.ts",
-        "../DefinitelyTyped/q/Q.d.ts"
+        "./typings/body-parser/body-parser.d.ts",
+        "./typings/express/express.d.ts",
+        "./typings/mime/mime.d.ts",
+        "./typings/node/node.d.ts",
+        "./typings/q/Q.d.ts",
+        "./typings/react/react.d.ts",
+        "./typings/serve-static/serve-static.d.ts",
+        "./typings/tsd.d.ts",
+        "./helloWorld.tsx",
+        "./public/editview.tsx",
+        "./public/mainview.tsx"
     ],
     "scripts": {
         "postbuild": "sh postbuild.sh"

@@ -19,6 +19,8 @@ SOFTWARE.
 */
 "use strict";
 
+
+/*
 angular.module('homeblocks.editview', ['ngRoute'])
 .config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/e/:username/:token', {
@@ -179,3 +181,4 @@ function createEmptyBlock(x: number, y: number, type: string): FrontBlock {
     }
     return block;
 }
+*/
