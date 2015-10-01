@@ -17,24 +17,35 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-/// <reference path="../typings/react/react-global.d.ts" />
+/// <reference path="../../typings/react/react-global.d.ts" />
 
 "use strict";
 
-var mountNode: any = document.getElementById('mountNode');
-
-class Props {
-    public name: string;
+class BlockProps {
+    public block: FrontBlock;
+    public isEdit: boolean;
+    public sharedZone: SharedZone;
 }
 
-class HelloMessage extends React.Component<Props, any> {
-    constructor(props: Props) {
+class BlockCpnt extends React.Component<BlockProps, any> {
+
+    constructor(props: BlockProps) {
         super(props);
     }
 
+    private getBlockContent(block: FrontBlock) {
+        switch (block.type) {
+            case "main": return <MainBlockCpnt sharedZone={this.props.sharedZone} username="Toto"/>;
+            case "links": return <LinkBlockCpnt links={block.links} sharedZone={this.props.sharedZone}/>;
+            default: return undefined;
+        }
+    }
+
     render() {
-        return <div>Hello {this.props.name}</div>;
+        var block = this.props.block;
+        return (<div className="block" style={block.style}>
+            {block.title ? (<div className="block-title">{block.title}</div>) : undefined}
+            {this.getBlockContent(block)}
+        </div>);
     }
 }
-
-React.render(<HelloMessage name="John" />, mountNode);

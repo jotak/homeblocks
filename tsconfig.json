@@ -35,7 +35,6 @@
         "./public/block.ts",
         "./public/blocks-processor.ts",
         "./public/dragndrop.ts",
-        "./public/main.ts",
         "./public/point.ts",
         "./routes.ts",
         "./typings/body-parser/body-parser.d.ts",
@@ -43,12 +42,18 @@
         "./typings/mime/mime.d.ts",
         "./typings/node/node.d.ts",
         "./typings/q/Q.d.ts",
+        "./typings/react/react-global.d.ts",
         "./typings/react/react.d.ts",
         "./typings/serve-static/serve-static.d.ts",
         "./typings/tsd.d.ts",
-        "./helloWorld.tsx",
+        "./public/components/blockCpnt.tsx",
+        "./public/components/blocksCpnt.tsx",
+        "./public/components/linkBlockCpnt.tsx",
+        "./public/components/mainBlockCpnt.tsx",
         "./public/editview.tsx",
-        "./public/mainview.tsx"
+        "./public/mainview.tsx",
+        "./public/profiles.tsx",
+        "./public/viewmode.tsx"
     ],
     "scripts": {
         "postbuild": "sh postbuild.sh"

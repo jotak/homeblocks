@@ -17,49 +17,46 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+/// <reference path="../../typings/react/react-global.d.ts" />
+
 "use strict";
 
-interface BlockStyleData {
-    marginLeft: number;
-    marginTop: number;
-    color: string;
-    dx: number;
-    dy: number;
+class BlocksProps {
+    public blocks: FrontBlock[];
+    public isEdit: boolean;
 }
 
-class FrontLink {
-    public title: string;
-    public url: string;
-    public description: string;
-    public editing: boolean;
+interface DisplayCallback {
+    f: (msg: string) => void;
+    ctx: any;
 }
 
-class FrontBlock {
-    public static WIDTH: number = 200;
-    public static HEIGHT: number = 200;
-    public static HALF_WIDTH: number = FrontBlock.WIDTH / 2;
-    public static HALF_HEIGHT: number = FrontBlock.HEIGHT / 2;
+class SharedZone {
+    private callbacks: DisplayCallback[] = [];
 
-    public id: number;
-    public posx: number;
-    public posy: number;
-    public title: string;
-    public style: string;
-    public N: boolean;
-    public S: boolean;
-    public E: boolean;
-    public W: boolean;
-    public NStyle: string;
-    public SStyle: string;
-    public EStyle: string;
-    public WStyle: string;
-    styleData: BlockStyleData;
-    public links: FrontLink[];
-    public type: string;
+    public register(clbk: (msg: string) => void, context: any) {
+        this.callbacks.push({f: clbk, ctx: context});
+    }
 
-    // Edition flags / temporary front-end (angular) data
-    public editTitle: boolean;
-    public fromProfile: string;
-    public fromBlocks: string[];
-    public selected: number;
+    public display(msg) {
+        this.callbacks.forEach(function(clbk) {
+            clbk.f.call(clbk.ctx, msg);
+        });
+    }
+}
+
+class BlocksCpnt extends React.Component<BlocksProps, any> {
+
+    private sharedZone: SharedZone = new SharedZone();
+
+    constructor(props: BlocksProps) {
+        super(props);
+    }
+
+    render() {
+        var self = this;
+        return <div>{self.props.blocks.map(function(block) {
+            return <BlockCpnt block={block} isEdit={self.props.isEdit} sharedZone={self.sharedZone}/>;
+        })}</div>
+    }
 }

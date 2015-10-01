@@ -17,49 +17,32 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+/// <reference path="../../typings/react/react-global.d.ts" />
+
 "use strict";
 
-interface BlockStyleData {
-    marginLeft: number;
-    marginTop: number;
-    color: string;
-    dx: number;
-    dy: number;
-}
-
-class FrontLink {
-    public title: string;
-    public url: string;
-    public description: string;
-    public editing: boolean;
-}
-
-class FrontBlock {
-    public static WIDTH: number = 200;
-    public static HEIGHT: number = 200;
-    public static HALF_WIDTH: number = FrontBlock.WIDTH / 2;
-    public static HALF_HEIGHT: number = FrontBlock.HEIGHT / 2;
-
-    public id: number;
-    public posx: number;
-    public posy: number;
-    public title: string;
-    public style: string;
-    public N: boolean;
-    public S: boolean;
-    public E: boolean;
-    public W: boolean;
-    public NStyle: string;
-    public SStyle: string;
-    public EStyle: string;
-    public WStyle: string;
-    styleData: BlockStyleData;
+class LinkBlockProps {
     public links: FrontLink[];
-    public type: string;
+    public sharedZone: SharedZone;
+}
 
-    // Edition flags / temporary front-end (angular) data
-    public editTitle: boolean;
-    public fromProfile: string;
-    public fromBlocks: string[];
-    public selected: number;
+class LinkBlockCpnt extends React.Component<LinkBlockProps, any> {
+
+    constructor(props: LinkBlockProps) {
+        super(props);
+    }
+
+    private mouseOver(description) {
+        var self = this;
+        return function() {
+            self.props.sharedZone.display(description);
+        }
+    }
+
+    render() {
+        var self = this;
+        return <ul>{this.props.links.map(function(link) {
+            return <li><a href={link.url} onMouseOver={self.mouseOver(link.description)}>{link.title}</a></li>;
+        })}</ul>;
+    }
 }
