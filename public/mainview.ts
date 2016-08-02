@@ -26,22 +26,21 @@ angular.module('homeblocks.mainview', ['ngRoute'])
         templateUrl: 'mainview.html',
         controller: 'mainViewCtrl'
     });
-}])
-.controller("mainViewCtrl", ['$scope','$http','$routeParams','$rootScope','$location', function($scope, $http, $routeParams, $rootScope, $location) {
+}]).controller("mainViewCtrl", ['$scope','$http','$routeParams','$rootScope','$location', function($scope, $http, $routeParams, $rootScope, $location) {
     $rootScope.title = $routeParams.username + "@homeblocks";
     $http.get('/api/profile/' + $routeParams.username)
         .success(function(profile) {
             $scope.profile = profile;
             $scope.username = $routeParams.username;
             $scope.blocks = profile.page.blocks;
-            fillPageStyle($scope.blocks);
+            $scope.minPos = { x: 0, y: 0};
+            fillPageStyle($scope.blocks, $scope.minPos);
             initMainListeners($scope, $location, $http);
         })
         .error(function(data) {
             console.log('Error: ' + data);
         });
-}])
-.directive("myEnter", function() {
+}]).directive("pressEnter", function() {
     return function(scope, element, attrs) {
         element.bind("keydown keypress", function (event) {
             if (event.which === 13) {
@@ -69,7 +68,7 @@ angular.module('homeblocks.mainview', ['ngRoute'])
                }
             });
         }
-    }
+    };
 });
 
 function initMainListeners($scope, $location, $http) {
@@ -134,17 +133,17 @@ function initMainListeners($scope, $location, $http) {
         setTimeout(function() {
             document.getElementById('newName').focus();
         }, 30);
-    }
+    };
     $scope.onClickEdit = function() {
         $scope.showEdit = !$scope.showEdit;
         setTimeout(function() {
             document.getElementById('editPwd').focus();
         }, 30);
-    }
+    };
     $scope.onClickDuplicate = function() {
         $scope.showDuplicate = !$scope.showDuplicate;
         setTimeout(function() {
             document.getElementById('dupName').focus();
         }, 30);
-    }
+    };
 }

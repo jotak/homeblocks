@@ -1,4 +1,4 @@
-<input type='text' placeholder='Profile name' ng-model='block.fromProfile' my-enter="onSearchBlocks(block);"><input type='button' value='Find' ng-click="onSearchBlocks(block);">
+<input type='text' placeholder='Profile name' ng-model='block.fromProfile' press-enter="onSearchBlocks(block);"><input type='button' value='Find' ng-click="onSearchBlocks(block);">
 <select ng-show="block.fromBlocks" ng-init="block.selected = 0" ng-model="block.selected">
     <option ng-repeat="fromBlock in block.fromBlocks" value="{{ $index }}">{{ fromBlock + " (" + $index + ")" }}</option>
 </select>
