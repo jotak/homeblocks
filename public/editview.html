@@ -1,14 +1,14 @@
 <!-- Page -->
 <div id="page">
     <!-- Loop over blocks -->
-    <div class="block" style="{{ block.style }}" ng-repeat="block in blocks" drag-n-drop>
+    <div class="block" style="{{ block.style }}" ng-repeat="block in blocks">
         <div ng-class="{'hidden': block.editTitle }">
             <div ng-if="block.type != 'main'" class="block-title" ng-click='onClickBlockTitle(block, "blockTitle_" + block.id);'>
                 {{ block.title || "(no title)" }}
             </div>
         </div>
         <div ng-class="{'hidden': !block.editTitle }">
-            <input id='{{ "blockTitle_" + block.id }}' type='text' placeholder='Title' ng-model='block.title' press-enter="onSaveBlock(block);">
+            <input id='{{ "blockTitle_" + block.id }}' type='text' placeholder='Title' ng-model='block.title' my-enter="onSaveBlock(block);">
             <input type='button' value='Ok' ng-click="onSaveBlock(block);">
         </div>
         <ng-include src="'partials/block-'+ block.type + '-edit.html'"></ng-include>

@@ -26,7 +26,7 @@ angular.module('homeblocks.editview', ['ngRoute'])
         controller: 'editViewCtrl'
     });
 }])
-.controller("editViewCtrl", ['$scope','$http','$routeParams','$rootScope','$location','$document', function($scope, $http, $routeParams, $rootScope, $location, $document) {
+.controller("editViewCtrl", ['$scope','$http','$routeParams','$rootScope','$location', function($scope, $http, $routeParams, $rootScope, $location) {
     $rootScope.title = $routeParams.username + "@homeblocks";
     $http.get('/api/profile/' + $routeParams.username)
         .success(function(profile) {
@@ -34,47 +34,40 @@ angular.module('homeblocks.editview', ['ngRoute'])
             $scope.username = $routeParams.username;
             $scope.token = $routeParams.token;
             $scope.blocks = profile.page.blocks;
-            $scope.minPos = { x: 0, y: 0};
-            fillPageStyle($scope.blocks, $scope.minPos);
-            initEditListeners($scope, $location, $http, $document);
+            fillPageStyle($scope.blocks);
+            initEditListeners($scope, $location, $http);
         })
         .error(function(data) {
             console.log('Error: ' + data);
         });
-}]).directive("dragNDrop", function() {
-    return function(scope, element, attrs) {
-        element.bind("mousedown", function (event) {
-            new DragNDrop(event, scope.block, element[0]);
-        });
-    };
-});
+}]);
 
-function initEditListeners($scope, $location, $http, $document) {
+function initEditListeners($scope, $location, $http) {
     $scope.viewMode = function() {
         $scope.token = "";
         $location.path("/v/" + $scope.username);
     };
 
-    $scope.onClickBlockTitle = function(block: FrontBlock, focusId) {
+    $scope.onClickBlockTitle = function(block, focusId) {
         block.editTitle = true;
         setTimeout(function() {
             document.getElementById(focusId).focus();
         }, 30);
     };
 
-    $scope.onClickLink = function(link: FrontLink, focusId) {
+    $scope.onClickLink = function(link, focusId) {
         link.editing = true;
         setTimeout(function() {
             document.getElementById(focusId).focus();
         }, 30);
     };
 
-    $scope.onSaveLink = function(link: FrontLink) {
+    $scope.onSaveLink = function(link) {
         link.editing = false;
         saveProfile($http, $scope.token, $scope.profile);
     };
 
-    $scope.onCreateLink = function(block: FrontBlock) {
+    $scope.onCreateLink = function(block) {
         var link = {
             title: "",
             url: "http://",
@@ -85,61 +78,61 @@ function initEditListeners($scope, $location, $http, $document) {
         saveProfile($http, $scope.token, $scope.profile);
     };
 
-    $scope.onDeleteLink = function(block: FrontBlock, index) {
+    $scope.onDeleteLink = function(block, index) {
         block.links.splice(index, 1);
         saveProfile($http, $scope.token, $scope.profile);
     };
 
-    $scope.onLinkUp = function(block: FrontBlock, index) {
+    $scope.onLinkUp = function(block, index) {
         var tmp = block.links[index-1];
         block.links[index-1] = block.links[index];
         block.links[index] = tmp;
         saveProfile($http, $scope.token, $scope.profile);
     };
 
-    $scope.onSaveBlock = function(block: FrontBlock) {
+    $scope.onSaveBlock = function(block) {
         block.editTitle = false;
         saveProfile($http, $scope.token, $scope.profile);
     };
 
-    $scope.onCreateBlock = function(x: number, y: number, type: string) {
+    $scope.onCreateBlock = function(x, y, type) {
         var block = createEmptyBlock(x, y, type);
         if (block != null) {
             $scope.blocks.push(block);
-            fillPageStyle($scope.blocks, $scope.minPos);
+            fillPageStyle($scope.blocks);
             saveProfile($http, $scope.token, $scope.profile);
         }
     };
 
-    $scope.onCreateCopyBlock = function(x: number, y: number) {
+    $scope.onCreateCopyBlock = function(x, y) {
         $scope.blocks.push({
             posx: x,
             posy: y,
             type: "copy"
         });
-        fillPageStyle($scope.blocks, $scope.minPos);
+        fillPageStyle($scope.blocks);
     };
 
-    $scope.onSwapBlocks = function(b1: FrontBlock, b2x: number, b2y: number) {
+    $scope.onSwapBlocks = function(b1, b2x, b2y) {
         var b2 = findBlockByPosition($scope.blocks, b2x, b2y);
         b2.posx = b1.posx;
         b2.posy = b1.posy;
         b1.posx = b2x;
         b1.posy = b2y;
-        fillPageStyle($scope.blocks, $scope.minPos);
+        fillPageStyle($scope.blocks);
         saveProfile($http, $scope.token, $scope.profile);
     };
 
-    $scope.onDeleteBlock = function(block: FrontBlock) {
+    $scope.onDeleteBlock = function(block) {
         var index = $scope.blocks.indexOf(block);
         if (index >= 0) {
             $scope.blocks.splice(index, 1);
-            fillPageStyle($scope.blocks, $scope.minPos);
+            fillPageStyle($scope.blocks);
             saveProfile($http, $scope.token, $scope.profile);
         }
     };
 
-    $scope.onSearchBlocks = function(block: FrontBlock) {
+    $scope.onSearchBlocks = function(block) {
         $http.get('/api/profile/' + block.fromProfile + "/blocknames")
             .success(function(blockNames) {
                 block.fromBlocks = blockNames;
@@ -149,28 +142,28 @@ function initEditListeners($scope, $location, $http, $document) {
             });
     };
 
-    $scope.onCopyBlock = function(block: FrontBlock) {
+    $scope.onCopyBlock = function(block) {
         $http.get('/api/profile/' + block.fromProfile + "/block/" + block.selected)
             .success(function(fromBlock) {
                 fromBlock.posx = block.posx;
                 fromBlock.posy = block.posy;
                 var index = $scope.blocks.indexOf(block);
                 $scope.blocks[index] = fromBlock;
-                fillPageStyle($scope.blocks, $scope.minPos);
+                fillPageStyle($scope.blocks);
                 saveProfile($http, $scope.token, $scope.profile);
             })
             .error(function(data) {
                 console.log('Error: ' + data);
             });
     };
-    DragNDrop.register($document, $scope, computeBlockStyle);
 }
 
-function createEmptyBlock(x: number, y: number, type: string): FrontBlock {
-    var block: FrontBlock = new FrontBlock();
-    block.posx = x;
-    block.posy = y;
-    block.type = type;
+function createEmptyBlock(x, y, type) {
+    var block: any = {
+        posx: x,
+        posy: y,
+        type: type
+    };
     if (type == "links" || type == "audio" || type == "video") {
         block.links = [];
     } else {

@@ -6,8 +6,8 @@
             <a ng-click="onDeleteLink(block, $index);" ng-mouseover="profile.message='Delete source'"><i class="fa fa-trash"></i></a>
         </div>
         <div ng-show="link.editing">
-            <input type='text' id='{{ "linkTitle_" + block.id + "_" + $index }}' placeholder='Title' ng-model='link.title' press-enter="onSaveLink(link);"><br/>
-            <input type='text' placeholder='Video source' ng-model='link.url' press-enter="onSaveLink(link);">
+            <input type='text' id='{{ "linkTitle_" + block.id + "_" + $index }}' placeholder='Title' ng-model='link.title' my-enter="onSaveLink(link);"><br/>
+            <input type='text' placeholder='Video source' ng-model='link.url' my-enter="onSaveLink(link);">
             <input type='button' value='Ok' ng-click="onSaveLink(link);">
         </div>
     </li>

@@ -30,7 +30,7 @@ angular.module('homeblocks', [
     $routeProvider.otherwise({redirectTo: '/v/sandbox'});
 }]);
 
-function computePositions(blocks: FrontBlock[]) {
+function computePositions(blocks) {
     var map = {};
     // First pass: fill map
     for (var i in blocks) {
@@ -47,7 +47,7 @@ function computePositions(blocks: FrontBlock[]) {
     }
 }
 
-function findBlockByPosition(blocks: FrontBlock[], x: number, y: number): FrontBlock {
+function findBlockByPosition(blocks, x, y) {
     for (var i in blocks) {
         var block = blocks[i];
         if (block.posx == x && block.posy == y) {
@@ -69,9 +69,10 @@ function saveProfile($http, token, profile) {
     return deferred.promise;
 }
 
-function fillPageStyle(blocks: FrontBlock[], minPos) {
+function fillPageStyle(blocks) {
     computePositions(blocks);
     var id = 0;
+    var minPos = {x: 0, y: 0};
     // If minimum positions are negative, some part of the blocks would be hidden => we will shift them
     for (var i in blocks) {
         minPos = checkOutOfScreen(blocks[i], minPos);
@@ -81,9 +82,9 @@ function fillPageStyle(blocks: FrontBlock[], minPos) {
     }
 }
 
-function checkOutOfScreen(block: FrontBlock, minPos) {
-    var marginLeft = -FrontBlock.HALF_WIDTH + block.posx * FrontBlock.WIDTH;
-    var marginTop = -FrontBlock.HALF_HEIGHT + block.posy * FrontBlock.HEIGHT;
+function checkOutOfScreen(block, minPos) {
+    var marginLeft = -100 + block.posx * 200;
+    var marginTop = -100 + block.posy * 200;
     // Compute minimum positions
     var x = window.innerWidth / 2 + marginLeft;
     var y = window.innerHeight / 2 + marginTop;
@@ -96,25 +97,14 @@ function checkOutOfScreen(block: FrontBlock, minPos) {
     return minPos;
 }
 
-function fillBlockStyle(block: FrontBlock, id: number, minPos) {
-    block.styleData = {
-        marginLeft: -minPos.x - FrontBlock.HALF_WIDTH + block.posx * FrontBlock.WIDTH,
-        marginTop: -minPos.y - FrontBlock.HALF_HEIGHT + block.posy * FrontBlock.HEIGHT,
-        color: ((block.posx + block.posy) % 2) ? "#34495e" : "#020202",
-        dx: 0,
-        dy: 0
-    };
-    block.id = id;
-    computeBlockStyle(block);
-}
-
-function computeBlockStyle(block: FrontBlock): string {
-    var marginLeft = block.styleData.marginLeft + block.styleData.dx;
-    var marginTop = block.styleData.marginTop + block.styleData.dy;
-    block.style = "margin-left: " + marginLeft + "px; margin-top: " + marginTop + "px; background-color: " + block.styleData.color;
+function fillBlockStyle(block, id, minPos) {
+    var marginLeft = -minPos.x - 100 + block.posx * 200;
+    var marginTop = -minPos.y - 100 + block.posy * 200;
+    var color = ((block.posx + block.posy) % 2) ? "#34495e" : "#020202";
+    block.style = "margin-left: " + marginLeft + "px; margin-top: " + marginTop + "px; background-color: " + color;
     block.NStyle = "margin-left: " + (marginLeft+100) + "px; margin-top: " + marginTop + "px;";
     block.SStyle = "margin-left: " + (marginLeft+100) + "px; margin-top: " + (marginTop+200) + "px;";
     block.EStyle = "margin-left: " + (marginLeft+200) + "px; margin-top: " + (marginTop+100) + "px;";
     block.WStyle = "margin-left: " + marginLeft + "px; margin-top: " + (marginTop+100) + "px;";
-    return block.style;
+    block.id = id;
 }
