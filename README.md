@@ -24,4 +24,4 @@ To build with typescript, first install dependencies with typings:
 
 ... and I think that's pretty much all. Note that last time I did this, I had to manually update angular .d.ts to wipe out StaticJQuery references (or something like that).
 
-
+I build it with Atom, then run *npm install* under ../homeblocks_openshift and finally *node main.js* and that's it!
