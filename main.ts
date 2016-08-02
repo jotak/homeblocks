@@ -36,4 +36,4 @@ Sandbox.init(profiles);
 routes.register(app, profiles);
 app.listen(port);
 
-console.log("Application listens on " + port);
+console.log("It's " + new Date().toString() + ", application listens on " + port);
