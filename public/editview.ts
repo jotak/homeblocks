@@ -41,13 +41,7 @@ angular.module('homeblocks.editview', ['ngRoute'])
         .error(function(data) {
             console.log('Error: ' + data);
         });
-}]).directive("dragNDrop", function() {
-    return function(scope, element, attrs) {
-        element.bind("mousedown", function (event) {
-            new DragNDrop(event, scope.block, element[0]);
-        });
-    };
-});
+}]);
 
 function initEditListeners($scope, $location, $http, $document) {
     $scope.viewMode = function() {
@@ -163,7 +157,6 @@ function initEditListeners($scope, $location, $http, $document) {
                 console.log('Error: ' + data);
             });
     };
-    DragNDrop.register($document, $scope, computeBlockStyle);
 }
 
 function createEmptyBlock(x: number, y: number, type: string): FrontBlock {
