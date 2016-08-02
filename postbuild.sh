@@ -1,20 +1,20 @@
 #!/bin/bash
 
-cp package.json ../homeblocks_js/
-rm ../homeblocks_js/public/*.css
-rm ../homeblocks_js/public/*.html
-rm -r ../homeblocks_js/public/inc
-mkdir ../homeblocks_js/public/inc
-rm -r ../homeblocks_js/public/partials
-mkdir ../homeblocks_js/public/partials
-rm -r ../homeblocks_js/public/css
-mkdir ../homeblocks_js/public/css
-rm -r ../homeblocks_js/public/fonts
-mkdir ../homeblocks_js/public/fonts
-cp public/*.css ../homeblocks_js/public
-cp public/*.html ../homeblocks_js/public
-cp public/inc/* ../homeblocks_js/public/inc
-cp public/partials/* ../homeblocks_js/public/partials
-cp public/css/* ../homeblocks_js/public/css
-cp public/fonts/* ../homeblocks_js/public/fonts
-cp public/favicon.ico ../homeblocks_js/public
+cp package.json ../homeblocks_openshift/
+rm ../homeblocks_openshift/public/*.css
+rm ../homeblocks_openshift/public/*.html
+rm -r ../homeblocks_openshift/public/inc
+mkdir ../homeblocks_openshift/public/inc
+rm -r ../homeblocks_openshift/public/partials
+mkdir ../homeblocks_openshift/public/partials
+rm -r ../homeblocks_openshift/public/css
+mkdir ../homeblocks_openshift/public/css
+rm -r ../homeblocks_openshift/public/fonts
+mkdir ../homeblocks_openshift/public/fonts
+cp public/*.css ../homeblocks_openshift/public
+cp public/*.html ../homeblocks_openshift/public
+cp public/inc/* ../homeblocks_openshift/public/inc
+cp public/partials/* ../homeblocks_openshift/public/partials
+cp public/css/* ../homeblocks_openshift/public/css
+cp public/fonts/* ../homeblocks_openshift/public/fonts
+cp public/favicon.ico ../homeblocks_openshift/public

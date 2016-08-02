@@ -35,13 +35,7 @@ class Profiles {
         self.files = files;
         self.files.mkDir("profiles").then(function(isCreated: boolean) {
             if (isCreated) {
-                console.log("'profiles' folder has been created. Now initializing sandbox...")
-                var profile: Profile = Profiles.generateSandbox();
-                self.files.write(Profiles.path(profile.username), JSON.stringify(Profiles.copyProfile(profile))).then(function() {
-                    console.log("sandbox successfully initialized.")
-                }).fail(function(err) {
-                    console.error(err);
-                }).done();
+                console.log("'profiles' folder has been created.");
             }
         }).fail(function(err) {
             console.error(err);
@@ -61,11 +55,15 @@ class Profiles {
                 // Save it
                 console.log("Profile migration for " + username + ". Saving migrated profile.");
                 profile = Profiles.copyProfile(profile);
-                self.files.write(Profiles.path(profile.username), JSON.stringify(profile));
+                self.writeUnchecked(profile);
                 return profile;
             }
             return json;
         });
+    }
+
+    public writeUnchecked(profile: Profile): q.Promise<boolean> {
+        return this.files.write(Profiles.path(profile.username), JSON.stringify(Profiles.copyProfile(profile)));
     }
 
     public create(username: string, password: string): q.Promise<boolean> {
@@ -77,7 +75,7 @@ class Profiles {
             if (err.code == "ENOENT") {
                 self.hash(password).then(function(hash: string) {
                     var profile: Profile = Profiles.generateEmptyProfile(username, hash);
-                    self.files.write(Profiles.path(profile.username), JSON.stringify(Profiles.copyProfile(profile))).then(function() {
+                    self.writeUnchecked(profile).then(function() {
                         deferred.resolve(true);
                     });
                 }).fail(function(err) {
@@ -94,7 +92,7 @@ class Profiles {
         var self = this;
         return self.load(profile.username).then(function(old: Profile) {
             profile.password = old.password;
-            return self.files.write(Profiles.path(profile.username), JSON.stringify(Profiles.copyProfile(profile)));
+            return self.writeUnchecked(profile);
         });
     }
 
@@ -124,24 +122,6 @@ class Profiles {
                 blocks: [Blocks.main(0, 0)]
             }
         }
-    }
-
-    static generateSandbox(): Profile {
-        var sandbox: Profile = Profiles.generateEmptyProfile("sandbox", "");
-        sandbox.page.blocks.push(Blocks.links(1, 0, "Awesome sites", [{
-                title: "Homeblocks",
-                url: "http://www.homeblocks.net/#v/sandbox",
-                description: "Build your homepage, block after block! Feel free to edit the sandbox (no password), or create a new profile."
-            },{
-                title: "Homeblocks/jotak",
-                url: "http://www.homeblocks.net/#/v/jotak",
-                description: "Example: @jotak's homepage"
-            },{
-                title: "Homeblocks@GitHub",
-                url: "https://github.com/jotak/homeblocks",
-                description: "Check me out on github!"
-            }]));
-        return sandbox;
     }
 
     private static copyProfile(profile: Profile): Profile {

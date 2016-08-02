@@ -1,52 +1,32 @@
 {
-    "version": "1.5.0-beta",
     "compilerOptions": {
         "target": "es5",
         "module": "commonjs",
+        "moduleResolution": "node",
         "isolatedModules": false,
         "jsx": "react",
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "declaration": false,
         "noImplicitAny": false,
+        "noImplicitUseStrict": false,
         "removeComments": true,
         "noLib": false,
+        "outDir": "../homeblocks_openshift",
         "preserveConstEnums": true,
-        "suppressImplicitAnyIndexErrors": true,
-        "outDir": "../homeblocks_js"
+        "suppressImplicitAnyIndexErrors": true
     },
-    "filesGlob": [
-        "./**/*.ts",
-        "./**/*.tsx",
-        "!./node_modules/**/*",
-        "../DefinitelyTyped/express/express.d.ts",
-        "../DefinitelyTyped/body-parser/body-parser.d.ts",
-        "../DefinitelyTyped/angularjs/angular.d.ts",
-        "../DefinitelyTyped/q/Q.d.ts"
+    "exclude": [
+        "node_modules",
+        "typings/browser",
+        "typings/browser.d.ts"
     ],
-    "files": [
-        "./block.ts",
-        "./blocks.ts",
-        "./files.ts",
-        "./link.ts",
-        "./main.ts",
-        "./main_openshift.ts",
-        "./migrate.ts",
-        "./page.ts",
-        "./profile.ts",
-        "./profiles.ts",
-        "./public/app.ts",
-        "./public/block.ts",
-        "./public/dragndrop.ts",
-        "./public/editview.ts",
-        "./public/mainview.ts",
-        "./routes.ts",
-        "../DefinitelyTyped/express/express.d.ts",
-        "../DefinitelyTyped/body-parser/body-parser.d.ts",
-        "../DefinitelyTyped/angularjs/angular.d.ts",
-        "../DefinitelyTyped/q/Q.d.ts"
-    ],
+    "compileOnSave": true,
+    "buildOnSave": false,
     "scripts": {
-        "postbuild": "sh postbuild.sh"
+      "postbuild": "sh postbuild.sh"
+    },
+    "atom": {
+        "rewriteTsconfig": false
     }
 }

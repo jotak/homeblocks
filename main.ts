@@ -22,6 +22,7 @@ import bodyParser = require('body-parser');
 import routes = require('./routes');
 import Profiles = require('./profiles');
 import Files = require('./files');
+import Sandbox = require('./sandbox-generator');
 
 "use strict";
 
@@ -30,7 +31,9 @@ var port: Number = (process.env.PORT || 5000);
 var app: express.Application = express();
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
-routes.register(app, new Profiles(new Files("")));
+let profiles: Profiles = new Profiles(new Files(""));
+Sandbox.init(profiles);
+routes.register(app, profiles);
 app.listen(port);
 
 console.log("Application listens on " + port);

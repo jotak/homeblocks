@@ -5,3 +5,5 @@ generated_js/
 node/
 angularjs/
 profiles/
+typings/
+typings.json

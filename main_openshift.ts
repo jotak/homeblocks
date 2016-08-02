@@ -22,6 +22,7 @@ import bodyParser = require('body-parser');
 import routes = require('./routes');
 import Profiles = require('./profiles');
 import Files = require('./files');
+import Sandbox = require('./sandbox-generator');
 
 "use strict";
 
@@ -93,7 +94,9 @@ class Server {
         this.app = express();
         this.app.use(express.static(__dirname + '/public'));
         this.app.use(bodyParser.json());
-        routes.register(this.app, new Profiles(new Files(process.env.OPENSHIFT_DATA_DIR || "")));
+        let profiles: Profiles = new Profiles(new Files(process.env.OPENSHIFT_DATA_DIR || ""));
+        Sandbox.init(profiles);
+        routes.register(this.app, profiles);
     }
 
     /**
